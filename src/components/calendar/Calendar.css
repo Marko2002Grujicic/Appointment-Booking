@@ -1,0 +1,15 @@
+.fc-list-day-cushion {
+  background-color: #d3d3d3;
+}
+.fc-list-day-text {
+  color: black;
+}
+
+tr:hover {
+  td.fc-list-event-time,
+  td.fc-list-event-graphic,
+  td.fc-list-event-title {
+    background-color: #2c3e50 !important;
+    color: white;
+  }
+}
