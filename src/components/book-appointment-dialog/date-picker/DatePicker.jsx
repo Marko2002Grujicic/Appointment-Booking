@@ -8,12 +8,12 @@ const StyledDateInput = styled("input")(({ theme }) => ({
   borderRadius: "5px",
   border: `1px solid ${theme.palette.mode === "dark" ? "#52525E" : "#c4c4c4"}`,
   background: theme.palette.mode === "dark" ? "#1E1E2D" : "#F2F4F7",
-  color: theme.palette.mode === "light" ? "#1E1E2D" : "#F2F4F7",
+  color: theme.palette.mode !== "dark" ? "#1E1E2D" : "#F2F4F7",
   "&:hover": {
-    border: `1px solid ${theme.palette.mode === "dark" ? "#fff" : "black"}`,
+    border: `1.5px solid ${theme.palette.mode === "dark" ? "#fff" : "black"}`,
   },
   "&:focus": {
-    border: `2px solid ${theme.palette.mode === "dark" ? "#fff" : "#d0d4dd"}`,
+    border: `1.5px solid ${theme.palette.mode === "dark" ? "#fff" : "#d0d4dd"}`,
     outline: "none",
   },
 }));

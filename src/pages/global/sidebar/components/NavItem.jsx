@@ -5,7 +5,15 @@ import { MenuItem } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { tokens } from "../../../../theme";
 import { DialogContext } from "../../../../context/DialogContext";
-const NavItem = ({ title, to, icon, selected, setSelected, event = false }) => {
+const NavItem = ({
+  title,
+  to,
+  icon,
+  selected,
+  setSelected,
+  event = false,
+  redirectPath = "",
+}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { setIsOpen } = useContext(DialogContext);
@@ -34,7 +42,14 @@ const NavItem = ({ title, to, icon, selected, setSelected, event = false }) => {
       style={menuItemStyles}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={event ? () => setIsOpen(true) : () => setSelected(title)}
+      onClick={
+        event
+          ? () => {
+              setSelected(redirectPath);
+              setIsOpen(true);
+            }
+          : () => setSelected(title)
+      }
       component={<Link to={to} />}
       icon={icon}
     >

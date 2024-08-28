@@ -21,10 +21,10 @@ const StyledTextArea = styled("textarea")(({ theme }) => ({
     opacity: "0.8 ",
   },
   "&:hover": {
-    border: `1px solid ${theme.palette.mode === "dark" ? "#fff" : "black"}`,
+    border: `1.5px solid ${theme.palette.mode === "dark" ? "#fff" : "black"}`,
   },
   "&:focus": {
-    border: `2px solid ${theme.palette.mode === "dark" ? "#fff" : "#d0d4dd"}`,
+    border: `1.5px solid ${theme.palette.mode === "dark" ? "#fff" : "#d0d4dd"}`,
     outline: "none",
   },
 }));

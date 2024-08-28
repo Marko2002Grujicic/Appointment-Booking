@@ -1,11 +1,11 @@
 import React from "react";
 import { Formik } from "formik";
 import { Box, Button, TextField } from "@mui/material";
-import Header from "../../components/header/Header";
-import { initialValues, formFields } from "./helper/constants";
-import { userSchema } from "./helper/schema";
+import Header from "../../../components/header/Header";
+import { initialValues, formFields } from "../helper/constants";
+import { userSchema } from "../helper/schema";
 import { useTheme } from "@emotion/react";
-import { tokens } from "../../theme";
+import { tokens } from "../../../theme";
 
 const CreateUser = () => {
   const handleFormSubmit = (values) => {

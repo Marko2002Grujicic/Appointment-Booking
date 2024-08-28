@@ -11,6 +11,8 @@ const navItems = [
   {
     title: "Нови Састанак",
     icon: <Add />,
+    to: "/",
+    redirectPath: "Календар",
     event: true,
   },
   {
@@ -49,6 +51,7 @@ const NavItems = () => {
       selected={item.event ? undefined : selected}
       setSelected={setSelected}
       event={item.event}
+      redirectPath={item.redirectPath}
     />
   ));
 };

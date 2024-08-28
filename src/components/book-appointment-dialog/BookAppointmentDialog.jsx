@@ -1,11 +1,5 @@
 import React, { useContext } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../../theme";
 import { DialogContext } from "../../context/DialogContext";
@@ -29,26 +23,12 @@ const BookAppointmentDialog = () => {
           Креирајте Састанак
         </DialogTitle>
         <DialogContent sx={{ width: 500, background: defaultColor }}>
-          <AppointmentForm />
+          <AppointmentForm
+            reversedColor={reversedColor}
+            defaultColor={defaultColor}
+            toggleModal={toggleModal}
+          />
         </DialogContent>
-        <DialogActions sx={{ background: defaultColor }}>
-          <Button
-            sx={{
-              color: reversedColor,
-            }}
-            onClick={toggleModal}
-          >
-            Cancel
-          </Button>
-          <Button
-            sx={{
-              color: reversedColor,
-            }}
-            type="submit"
-          >
-            Set Appointment
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   );

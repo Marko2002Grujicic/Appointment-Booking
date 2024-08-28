@@ -1,8 +1,8 @@
 import React from "react";
-import CreateUser from "../create-user-form/CreateUser";
+import RegistrationForm from "../forms/registration-form/RegistrationForm";
 
 const Settings = () => {
-  return <CreateUser />;
+  return <RegistrationForm />;
 };
 
 export default Settings;
