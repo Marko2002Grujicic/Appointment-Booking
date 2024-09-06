@@ -1,0 +1,21 @@
+.icon {
+  width: 13px;
+  height: 14px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.trash {
+  background-color: gray;
+  color: white;
+}
+
+.plus {
+  margin-top: 10px;
+  color: #1e1e2d;
+  @media (max-width: 600px) {
+    padding-left: 10px;
+  }
+}

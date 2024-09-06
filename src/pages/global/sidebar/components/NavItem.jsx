@@ -5,18 +5,19 @@ import { MenuItem } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { tokens } from "../../../../theme";
 import { DialogContext } from "../../../../context/DialogContext";
+
 const NavItem = ({
   title,
   to,
   icon,
   selected,
-  setSelected,
   event = false,
-  redirectPath = "",
+  collapse,
+  isCollapsed,
 }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { setIsOpen } = useContext(DialogContext);
+  const { setIsOpen, setSelectedEvent } = useContext(DialogContext);
 
   const menuItemStyles = {
     backgroundColor: colors.background.default,
@@ -35,21 +36,23 @@ const NavItem = ({
     e.currentTarget.style.color = colors.grey[100];
   };
 
+  const onClick = () => {
+    if (event) {
+      setIsOpen(true);
+      setSelectedEvent(null);
+    }
+    if (!isCollapsed) {
+      collapse();
+    }
+  };
+
   return (
     <MenuItem
-      active={selected === title}
-      className="menu-item"
+      active={!event && selected}
       style={menuItemStyles}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={
-        event
-          ? () => {
-              setSelected(redirectPath);
-              setIsOpen(true);
-            }
-          : () => setSelected(title)
-      }
+      onClick={onClick}
       component={<Link to={to} />}
       icon={icon}
     >

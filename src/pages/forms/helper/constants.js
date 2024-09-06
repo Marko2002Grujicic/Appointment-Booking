@@ -1,11 +1,5 @@
 import * as yup from "yup";
 
-const handleFormSubmit = () => {
-  const calendarKey = "Календар";
-  localStorage.setItem("selectedPage", JSON.stringify(calendarKey));
-  window.location.href = "/";
-};
-
 export const registrationForm = {
   initialValues: {
     name: "",
@@ -34,7 +28,6 @@ export const registrationForm = {
       .required("Поље је обавезно"),
     password: yup.string().required("Поље је обавезно"),
   }),
-  submitAction: handleFormSubmit,
 };
 
 export const loginForm = {
@@ -59,5 +52,4 @@ export const loginForm = {
       .required("Поље је обавезно"),
     password: yup.string().required("Поље је обавезно"),
   }),
-  submitAction: handleFormSubmit,
 };

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   SettingsOutlined,
   ImportContacts,
   CalendarTodayOutlined,
   Add,
 } from "@mui/icons-material";
+import { useLocation } from "react-router-dom";
 import NavItem from "./NavItem";
 
 const navItems = [
@@ -12,7 +13,6 @@ const navItems = [
     title: "Нови Састанак",
     icon: <Add />,
     to: "/",
-    redirectPath: "Календар",
     event: true,
   },
   {
@@ -27,33 +27,30 @@ const navItems = [
   },
   {
     title: "Помоћ",
-    to: "/help",
+    to: "/info",
     icon: <ImportContacts />,
   },
 ];
 
-const NavItems = () => {
-  const [selected, setSelected] = useState(() => {
-    const saved = localStorage.getItem("selectedPage");
-    return saved ? JSON.parse(saved) : "Календар";
+const NavItems = ({ collapse, isCollapsed }) => {
+  const location = useLocation();
+
+  return navItems.map((item, index) => {
+    const isSelected = location.pathname === item.to;
+
+    return (
+      <NavItem
+        isCollapsed={isCollapsed}
+        collapse={collapse}
+        key={index}
+        title={item.title}
+        to={item.to}
+        icon={item.icon}
+        selected={isSelected}
+        event={item.event}
+      />
+    );
   });
-
-  useEffect(() => {
-    localStorage.setItem("selectedPage", JSON.stringify(selected));
-  }, [selected]);
-
-  return navItems.map((item, index) => (
-    <NavItem
-      key={index}
-      title={item.title}
-      to={item.to}
-      icon={item.icon}
-      selected={item.event ? undefined : selected}
-      setSelected={setSelected}
-      event={item.event}
-      redirectPath={item.redirectPath}
-    />
-  ));
 };
 
 export default NavItems;

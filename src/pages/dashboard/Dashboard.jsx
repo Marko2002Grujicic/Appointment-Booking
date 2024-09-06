@@ -1,14 +1,14 @@
 import React from "react";
-import { Box } from "@mui/material";
 import Header from "../../components/header/Header";
 import CalendarComponent from "../../components/calendar/CalendarComponent";
+import PageWrapper from "./../../components/header/PageWrapper";
 
 const Dashboard = () => {
   return (
-    <Box m="20px">
+    <PageWrapper>
       <Header title="Календар" />
       <CalendarComponent />
-    </Box>
+    </PageWrapper>
   );
 };
 

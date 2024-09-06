@@ -19,6 +19,7 @@ export const StyledHeader = styled("div")(() => ({
 
 export const StyledInputsWrapper = styled("div")(() => ({
   marginTop: "55px",
+  padding: "0 20px",
   display: "flex",
   flexDirection: "column",
   gap: "25px",
@@ -28,7 +29,8 @@ export const StyledInputContainer = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   margin: "auto",
-  width: "480px",
+  width: "100%",
+  maxWidth: "480px",
   height: "80px",
   borderRadius: "5px",
   border: `1px solid ${theme.palette.mode !== "light" ? "#52525E" : "#c4c4c4"}`,

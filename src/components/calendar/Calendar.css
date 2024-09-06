@@ -5,6 +5,11 @@
   color: black;
 }
 
+.fc .fc-toolbar {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 tr:hover {
   td.fc-list-event-time,
   td.fc-list-event-graphic,

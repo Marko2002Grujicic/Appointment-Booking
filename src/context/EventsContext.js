@@ -1,13 +1,12 @@
 import React, { createContext, useState } from "react";
-import { scheduleData } from "../data/scheduleData";
 
 const EventsContext = createContext();
 
 const EventsProvider = ({ children }) => {
-  const [currentEvents, setCurrentEvents] = useState(scheduleData);
+  const [events, setEvents] = useState([]);
 
   return (
-    <EventsContext.Provider value={{ currentEvents, setCurrentEvents }}>
+    <EventsContext.Provider value={{ events, setEvents }}>
       {children}
     </EventsContext.Provider>
   );

@@ -1,8 +1,15 @@
 import React from "react";
-import RegistrationForm from "../forms/registration-form/RegistrationForm";
+import Availability from "../../components/availability/Availability";
+import Header from "./../../components/header/Header";
+import PageWrapper from "./../../components/header/PageWrapper";
 
 const Settings = () => {
-  return <RegistrationForm />;
+  return (
+    <PageWrapper>
+      <Header title="Подешавања" />
+      <Availability />
+    </PageWrapper>
+  );
 };
 
 export default Settings;

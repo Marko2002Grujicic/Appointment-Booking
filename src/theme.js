@@ -1,5 +1,6 @@
 import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles";
+import { getCookie, setCookie } from "./helpers/cookies/cookies";
 
 // color desing token
 export const tokens = (mode) => ({
@@ -27,6 +28,7 @@ export const tokens = (mode) => ({
           800: "#294266",
           900: "#142133",
         },
+        error: "#F44336",
         background: {
           default: "#1E1E2D",
           reversed: "#F2F4F7",
@@ -54,6 +56,11 @@ export const tokens = (mode) => ({
           700: "#a3cafe",
           800: "#c2dbff",
           900: "#e0edff",
+        },
+        error: "#F44336",
+        button: {
+          lighter: "#009ef7",
+          darker: "#6ea2f5",
         },
         background: {
           default: "#F2F4F7",
@@ -135,14 +142,13 @@ export const themeSettings = (mode) => {
   };
 };
 
-//context for color mode
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
 });
 
 export const useMode = () => {
   const [mode, setMode] = useState(() => {
-    const savedMode = localStorage.getItem("theme");
+    const savedMode = getCookie("theme");
     if (savedMode) return savedMode;
 
     const prefersDarkMode = window.matchMedia(
@@ -156,7 +162,7 @@ export const useMode = () => {
       toggleColorMode: () =>
         setMode((prev) => {
           const newMode = prev === "light" ? "dark" : "light";
-          localStorage.setItem("theme", newMode);
+          setCookie("theme", newMode);
           return newMode;
         }),
     }),

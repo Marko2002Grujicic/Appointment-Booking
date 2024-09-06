@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { Formik } from "formik";
+
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
 
 import { loginForm } from "../helper/constants";
 import password_icon from "../../../assets/form-icons/password.png";
@@ -18,9 +22,35 @@ import {
 } from "../StyledComponents";
 
 const LoginForm = () => {
+  const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(-1 || "/");
+      return;
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleLogin = async (values, actions) => {
+    try {
+      const response = await axios.post("http://localhost:5000/login", values, {
+        withCredentials: true,
+      });
+      login(response.data.token, response.data.userId);
+      navigate("/");
+    } catch (error) {
+      console.error(
+        "There was an error logging in:",
+        error.response?.data || error.message
+      );
+      actions.setFieldError("general", "Login failed. Please try again");
+    }
+  };
+
   return (
     <Formik
-      onSubmit={loginForm.handleFormSubmit}
+      onSubmit={handleLogin}
       initialValues={loginForm.initialValues}
       validationSchema={loginForm.schema}
     >
@@ -71,7 +101,7 @@ const LoginForm = () => {
             </StyledInputsWrapper>
           </StyledContainer>
           <SubmitContainer>
-            <StyledButton type="submit">{"Улогуј се"}</StyledButton>
+            <StyledButton type="submit">Улогуј се</StyledButton>
             <StyledLink to="/registration"> Региструј се</StyledLink>
           </SubmitContainer>
         </form>

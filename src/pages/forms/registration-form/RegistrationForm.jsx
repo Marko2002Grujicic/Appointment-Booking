@@ -1,10 +1,13 @@
 import React from "react";
+import axios from "axios";
 import { Formik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
 
-import { registrationForm } from "../helper/constants";
 import user_icon from "../../../assets/form-icons/person.png";
 import password_icon from "../../../assets/form-icons/password.png";
 import email_icon from "../../../assets/form-icons/email.png";
+import { registrationForm } from "../helper/constants";
 
 import {
   StyledContainer,
@@ -19,9 +22,40 @@ import {
 } from "../StyledComponents";
 
 const RegistrationForm = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleRegistration = async (values, actions) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/register",
+        values
+      );
+      login(response.data.token);
+      navigate("/login");
+    } catch (error) {
+      console.error(
+        "There was an error registering the user:",
+        error.response?.data || error.message
+      );
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error === "Email is already in use"
+      ) {
+        actions.setFieldError("email", "Email is already in use");
+      } else {
+        actions.setFieldError(
+          "general",
+          "Registration failed. Please try again"
+        );
+      }
+    }
+  };
+
   return (
     <Formik
-      onSubmit={registrationForm.submitAction}
+      onSubmit={handleRegistration}
       initialValues={registrationForm.initialValues}
       validationSchema={registrationForm.schema}
     >
