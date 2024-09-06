@@ -81,7 +81,6 @@ export const filteredTimeSlots = (
 ) => {
   const maxTime = findMaxEndTime(schedule, selectedStartTime);
   const selectedStartTimeMinutes = timeToMinutes(selectedStartTime);
-  const minTimeMinutes = selectedStartTimeMinutes + 30;
 
   return formattedSchedule.filter((slot) => {
     const startTimeMinutes = timeToMinutes(slot.start);
@@ -89,7 +88,8 @@ export const filteredTimeSlots = (
     const maxEndTimeMinutes = timeToMinutes(maxTime);
 
     return (
-      startTimeMinutes >= minTimeMinutes && endTimeMinutes <= maxEndTimeMinutes
+      startTimeMinutes >= selectedStartTimeMinutes &&
+      endTimeMinutes <= maxEndTimeMinutes
     );
   });
 };

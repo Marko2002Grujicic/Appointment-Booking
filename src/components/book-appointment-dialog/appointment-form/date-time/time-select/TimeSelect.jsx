@@ -2,7 +2,7 @@ import React from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { styled } from "@mui/system";
 import { HelperText } from "../date-picker/DatePicker";
-import { filteredTimeSlots } from "../../../../../helpers/generateTimeIntervals";
+import { filteredTimeSlots } from "../../../../../helpers/timeAdapters";
 
 const TimeSelect = ({
   value,

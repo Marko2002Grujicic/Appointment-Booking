@@ -15,7 +15,7 @@ import {
   editMeeting,
   createMeeting,
 } from "../../../helpers/fetch/fetch";
-import { generateTimeIntervals } from "./../../../helpers/generateTimeIntervals";
+import { generateTimeIntervals } from "./../../../helpers/timeAdapters";
 import { getCookie } from "../../../helpers/cookies/cookies";
 import DateTimePicker from "./date-time/DateTimePicker";
 import Guests from "./guests/Guests";

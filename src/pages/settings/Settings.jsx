@@ -1,7 +1,7 @@
 import React from "react";
 import Availability from "../../components/availability/Availability";
-import Header from "./../../components/header/Header";
-import PageWrapper from "./../../components/header/PageWrapper";
+import Header from "./../../components/common/Header";
+import PageWrapper from "./../../components/common/PageWrapper";
 
 const Settings = () => {
   return (

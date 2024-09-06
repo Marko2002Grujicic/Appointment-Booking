@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "../../components/header/Header";
+import Header from "../../components/common/Header";
+import PageWrapper from "./../../components/common/PageWrapper";
 import CalendarComponent from "../../components/calendar/CalendarComponent";
-import PageWrapper from "./../../components/header/PageWrapper";
 
 const Dashboard = () => {
   return (
