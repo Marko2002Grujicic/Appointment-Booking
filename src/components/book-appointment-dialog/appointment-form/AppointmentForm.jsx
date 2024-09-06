@@ -1,23 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import moment from "moment";
-import { Formik } from "formik";
 import { styled } from "@mui/system";
-import {
-  Stack,
-  Chip,
-  DialogActions,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
-import DatePicker from "./date-picker/DatePicker";
+import { Formik } from "formik";
+import { Stack, DialogActions, Button, TextField } from "@mui/material";
 import { DialogContext } from "../../../context/DialogContext";
 import { EventsContext } from "../../../context/EventsContext";
 import { appointmentFormSchema } from "./appointmentFormSchema";
-import TimeSelect from "./time-select/TimeSelect";
 import { formatEventToAPI } from "./../../../helpers/formatEventToApi";
 import { validateTimeSelection } from "./../../../helpers/validateTimeSelection";
 import {
@@ -29,6 +17,8 @@ import {
 } from "../../../helpers/fetch/fetch";
 import { generateTimeIntervals } from "./../../../helpers/generateTimeIntervals";
 import { getCookie } from "../../../helpers/cookies/cookies";
+import DateTimePicker from "./date-time/DateTimePicker";
+import Guests from "./guests/Guests";
 
 const AppointmentForm = ({ eventData }) => {
   const userId = Number(getCookie("userId"));
@@ -156,42 +146,18 @@ const AppointmentForm = ({ eventData }) => {
               error={Boolean(touched["title"]) && Boolean(errors["title"])}
               helperText={touched["title"] && errors["title"]}
             />
-            <DatePicker
-              value={values.date}
-              onBlur={handleBlur}
-              onChange={(e) => {
-                setSelectedDate(e.target.value);
-                setFieldValue("date", e.target.value);
-              }}
-              error={Boolean(touched["date"]) && Boolean(errors["date"])}
-              helperText={touched["date"] && errors["date"]}
+            <DateTimePicker
+              values={values}
+              errors={errors}
+              touched={touched}
+              timeIntervals={timeIntervals}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
+              rawTimeIntervals={rawTimeIntervals}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              setFieldValue={setFieldValue}
             />
-            <FlexBox>
-              <TimeSelect
-                name="start"
-                label="Почетак"
-                disabled={!Boolean(selectedDate)}
-                value={values.start}
-                onChange={handleChange}
-                error={Boolean(touched["start"]) && Boolean(errors["start"])}
-                helperText={touched["start"] && errors["start"]}
-                timeIntervals={timeIntervals}
-              />
-              <TimeSpan>до</TimeSpan>
-              <TimeSelect
-                label="Крај"
-                name="end"
-                disabled={!Boolean(values.start)}
-                value={values.end}
-                onChange={handleChange}
-                error={Boolean(touched["end"]) && Boolean(errors["end"])}
-                helperText={touched["end"] && errors["end"]}
-                selectedStartTime={values.start}
-                rawTimeIntervals={rawTimeIntervals}
-                isEnd
-                timeIntervals={timeIntervals}
-              />
-            </FlexBox>
             <TextField
               fullWidth
               variant="outlined"
@@ -208,37 +174,14 @@ const AppointmentForm = ({ eventData }) => {
               }
               helperText={touched["location"] && errors["location"]}
             />
-            <FormControl>
-              <InputLabel>Гости</InputLabel>
-              <Select
-                multiple
-                value={values.guests}
-                onChange={(event) =>
-                  setFieldValue("guests", event.target.value)
-                }
-                onBlur={handleBlur}
-                renderValue={(selected) =>
-                  Array.isArray(selected) ? (
-                    <div style={{ display: "flex", flexWrap: "wrap" }}>
-                      {selected.map((value) => (
-                        <Chip key={value} label={value} style={{ margin: 2 }} />
-                      ))}
-                    </div>
-                  ) : null
-                }
-                error={Boolean(touched["guests"]) && Boolean(errors["guests"])}
-                placeholder="Унесите Емаил адресе"
-                variant="outlined"
-                label="Гости"
-                name="guests"
-              >
-                {emailOptions.map((email) => (
-                  <MenuItem key={email} value={email}>
-                    {email}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Guests
+              values={values}
+              setFieldValue={setFieldValue}
+              handleBlur={handleBlur}
+              touched={touched}
+              errors={errors}
+              emailOptions={emailOptions}
+            />
             <TextField
               label="Додатне информације..."
               fullWidth
@@ -280,20 +223,6 @@ const StyledStack = styled(Stack)(() => ({
   width: "100%",
   gap: "20px",
   marginTop: "10px",
-}));
-
-const FlexBox = styled("span")(() => ({
-  display: "flex",
-  alignItems: "flex-start",
-  flexGrow: 1,
-  justifyContent: "center",
-}));
-
-const TimeSpan = styled("span")(() => ({
-  display: "flex",
-  alignItems: "center",
-  margin: "0 8px",
-  marginTop: "15px",
 }));
 
 export default AppointmentForm;

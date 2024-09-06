@@ -12,6 +12,7 @@ const DatePicker = (props) => {
 
 const StyledWrapper = styled("div")(() => ({
   display: "inline-flex",
+  width: "100%",
   flexDirection: "column",
   position: "relative",
   justifyContent: "flex-start",
