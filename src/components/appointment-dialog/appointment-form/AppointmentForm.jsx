@@ -4,31 +4,35 @@ import { styled } from "@mui/system";
 import { Formik } from "formik";
 import { Stack, TextField } from "@mui/material";
 import { DialogContext } from "../../../context/DialogContext";
-import { EventsContext } from "../../../context/EventsContext";
-import { AvailabilityContext } from "../../../context/AvailabilityContext";
 import { appointmentFormSchema } from "./appointmentFormSchema";
 import { formatEventToAPI } from "../../../helpers/formatEventToApi";
 import { validateTimeSelection } from "../../../helpers/validateTimeSelection";
-import {
-  fetchEvents,
-  fetchUserEmails,
-  editMeeting,
-  createMeeting,
-} from "../../../helpers/fetch/fetch";
+import { fetchUserEmails } from "../../../helpers/fetch/fetch";
 import { generateTimeIntervals } from "../../../helpers/timeAdapters";
 import { getCookie } from "../../../helpers/cookies/cookies";
 import DateTimePicker from "./date-time/DateTimePicker";
 import Guests from "./guests/Guests";
 import {
+  DeleteButton,
   DialogButton,
   StyledDialogActions,
 } from "../../../pages/login-and-registration/StyledComponents";
+import { useUserAvailability } from "../../availability/api/useUserAvailability";
+import { useAppointmentsCreate } from "../api/useAppointmentsCreate";
+import { useAppointmentsUpdate } from "../api/useAppointementsUpdate";
+import { useAppointmentsDelete } from "../api/useAppointmentsDelete";
+import { useTranslation } from "react-i18next";
 
 const AppointmentForm = ({ eventData }) => {
   const userId = Number(getCookie("userId"));
   const { setIsOpen } = useContext(DialogContext);
-  const { setEvents } = useContext(EventsContext);
-  const { userAvailability } = useContext(AvailabilityContext);
+  const { isLoading, data: userAvailability } = useUserAvailability();
+  const { mutateAsync: createAppointment, isLoading: isCreating } =
+    useAppointmentsCreate();
+  const { mutateAsync: editAppointment, isLoading: isEditing } =
+    useAppointmentsUpdate();
+  const { mutate: deleteAppointment, isLoading: isDeleting } =
+    useAppointmentsDelete();
   const [emailOptions, setEmailOptions] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
     eventData
@@ -37,8 +41,6 @@ const AppointmentForm = ({ eventData }) => {
   );
   const [timeIntervals, setTimeIntervals] = useState([]);
   const [rawTimeIntervals, setRawTimeIntervals] = useState([]);
-  let isLoading = false;
-
   const initialValues = {
     title: eventData?.title || "",
     start: eventData ? moment(eventData.start).format("HH:mm") : "",
@@ -50,6 +52,7 @@ const AppointmentForm = ({ eventData }) => {
     guests: eventData ? JSON.parse(eventData.guests) : [],
     description: eventData?.description || "",
   };
+  const { t } = useTranslation();
 
   useEffect(() => {
     const loadEmails = async () => {
@@ -75,8 +78,18 @@ const AppointmentForm = ({ eventData }) => {
     }
   }, [selectedDate, userAvailability]);
 
+  const handleDelete = async () => {
+    try {
+      const eventId = eventData.id;
+      deleteAppointment({ eventId });
+    } catch (error) {
+      console.error("Error deleting the event", error.message);
+    } finally {
+      setIsOpen((prev) => !prev);
+    }
+  };
+
   const handleFormSubmit = async (newEvent) => {
-    isLoading = true;
     const formattedEvent = formatEventToAPI(newEvent);
 
     const isValidTime = [userAvailability].every((availability) =>
@@ -94,16 +107,15 @@ const AppointmentForm = ({ eventData }) => {
     }
 
     try {
-      if (eventData) {
-        await editMeeting(eventData.id, formattedEvent);
+      if (eventData && formattedEvent) {
+        const eventId = eventData.id;
+        await editAppointment({ eventId, formattedEvent });
       } else {
-        await createMeeting(formattedEvent);
+        await createAppointment({ formattedEvent });
       }
     } catch (error) {
       console.error("Error submitting the event:", error.message);
     } finally {
-      fetchEvents(setEvents);
-      isLoading = false;
       setIsOpen((prev) => !prev);
     }
   };
@@ -132,14 +144,18 @@ const AppointmentForm = ({ eventData }) => {
               variant="outlined"
               color="secondary"
               type="text"
-              label="Наслов"
-              placeholder="Додајте наслов"
+              label={t("appointments.title")}
+              placeholder={t("appointments.addTitle")}
               name="title"
               value={values.title}
               onBlur={handleBlur}
               onChange={handleChange}
               error={Boolean(touched["title"]) && Boolean(errors["title"])}
-              helperText={touched["title"] && errors["title"]}
+              helperText={
+                touched["title"] && errors["title"]
+                  ? t(`errors.${errors["title"]}`)
+                  : ""
+              }
             />
             <DateTimePicker
               values={values}
@@ -158,8 +174,8 @@ const AppointmentForm = ({ eventData }) => {
               variant="outlined"
               color="secondary"
               type="text"
-              label="Локација"
-              placeholder="Додајте место или линк"
+              label={t("appointments.location")}
+              placeholder={t("appointments.addLocation")}
               name="location"
               value={values.location}
               onBlur={handleBlur}
@@ -167,7 +183,11 @@ const AppointmentForm = ({ eventData }) => {
               error={
                 Boolean(touched["location"]) && Boolean(errors["location"])
               }
-              helperText={touched["location"] && errors["location"]}
+              helperText={
+                touched["location"] && errors["location"]
+                  ? t(`errors.${errors["location"]}`)
+                  : ""
+              }
             />
             <Guests
               values={values}
@@ -178,7 +198,7 @@ const AppointmentForm = ({ eventData }) => {
               emailOptions={emailOptions}
             />
             <TextField
-              label="Додатне информације..."
+              label={t("appointments.description")}
               fullWidth
               variant="outlined"
               color="secondary"
@@ -189,13 +209,27 @@ const AppointmentForm = ({ eventData }) => {
               onChange={handleChange}
             />
           </StyledStack>
-          <StyledDialogActions>
-            <DialogButton onClick={() => setIsOpen((prev) => !prev)}>
-              Откажи
-            </DialogButton>
-            <DialogButton disabled={isLoading} type="submit">
-              Закажи
-            </DialogButton>
+          <StyledDialogActions spacebetween={"true"}>
+            <DeleteButton
+              disabled={isLoading || isCreating || isEditing || isDeleting}
+              onClick={handleDelete}
+            >
+              {t("form.delete")}
+            </DeleteButton>
+            <FlexBox>
+              <DialogButton
+                disabled={isLoading || isCreating || isEditing || isDeleting}
+                onClick={() => setIsOpen((prev) => !prev)}
+              >
+                {t("form.cancel")}
+              </DialogButton>
+              <DialogButton
+                disabled={isLoading || isCreating || isEditing || isDeleting}
+                type="submit"
+              >
+                {t("form.submit")}
+              </DialogButton>
+            </FlexBox>
           </StyledDialogActions>
         </FormContainer>
       )}
@@ -211,6 +245,10 @@ const StyledStack = styled(Stack)(() => ({
   width: "100%",
   gap: "20px",
   marginTop: "10px",
+}));
+
+const FlexBox = styled("div")(() => ({
+  display: "flex",
 }));
 
 export default AppointmentForm;

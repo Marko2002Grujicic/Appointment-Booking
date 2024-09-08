@@ -1,16 +1,15 @@
 import React from "react";
-import AvailabilityModal from "../../components/availability/availability-modal/AvailabilityModal";
+import { useTranslation } from "react-i18next";
 import Availability from "../../components/availability/Availability";
 import Header from "./../../components/common/Header";
 import PageWrapper from "./../../components/common/PageWrapper";
 
 const Settings = () => {
+  const { t } = useTranslation();
   return (
     <PageWrapper>
-      <Header title="Подешавања" />
-
+      <Header title={t("pages.settings")} />
       <Availability />
-      {/* <AvailabilityModal /> */}
     </PageWrapper>
   );
 };

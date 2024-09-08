@@ -15,9 +15,9 @@ const daySchema = array()
               return startTime < endTime;
             }
           ),
-        otherwise: () => number().required("Start Time required"),
+        otherwise: () => number().required("required"),
       }),
-      end: number().required("End time required"),
+      end: number().required("required"),
     })
   )
   .test("DoesntOverlap", "availabilityNoOverlaps", (availabilities) => {

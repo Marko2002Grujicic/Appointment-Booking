@@ -4,18 +4,15 @@ import * as yup from "yup";
 const now = moment().startOf("day");
 
 export const appointmentFormSchema = yup.object().shape({
-  title: yup.string().required("Поље је обавезно"),
-  start: yup.string().required("Поље је обавезно"),
-  end: yup.string().required("Поље је обавезно"),
-  date: yup
-    .date()
-    .required("Поље је обавезно")
-    .min(now, "Датум не сме бити у прошлости"),
-  location: yup.string().required("Поље је обавезно"),
+  title: yup.string().required("required"),
+  start: yup.string().required("required"),
+  end: yup.string().required("required"),
+  date: yup.date().required("required").min(now, "dateNoPast"),
+  location: yup.string().required("required"),
   guests: yup
     .array()
-    .of(yup.string().email("Погрешан формат мејла"))
-    .min(1, "Унесите минимум једног госта")
-    .required("Поље је обавезно"),
+    .of(yup.string().email("wrongFormat"))
+    .min(1, "minGuest")
+    .required("required"),
   description: yup.string().optional(),
 });

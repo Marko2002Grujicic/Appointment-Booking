@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { styled } from "@mui/system";
-import { useUserAvailability } from "./helper/useUserAvailability";
+import { useUserAvailability } from "./api/useUserAvailability";
 import { AVAILABILITY_INITIAL_VALUES } from "../../helpers/constants";
 import WorkingHours from "./working-hours/WorkingHours";
 import { Button } from "@mui/material";
 import { colors } from "../../helpers/colors";
 import AvailabilityModal from "./availability-modal/AvailabilityModal";
+import { useTranslation } from "react-i18next";
 
 const Availability = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
   const { isLoading, data, error } = useUserAvailability();
 
   if (isLoading) return <div>Loading...</div>;
@@ -17,13 +19,13 @@ const Availability = () => {
   return (
     <div>
       <Title>
-        Ваша Доступност за састанке
+        {t("availability.availabilityTitle")}
         <EditButton
           onClick={() => {
             setIsOpen(true);
           }}
         >
-          Измени
+          {t("form.edit")}
         </EditButton>
       </Title>
       <WorkingHours availability={data || AVAILABILITY_INITIAL_VALUES} />

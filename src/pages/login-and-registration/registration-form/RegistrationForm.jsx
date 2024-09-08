@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/AuthProvider";
 
 import user_icon from "../../../assets/form-icons/person.png";
@@ -23,6 +24,7 @@ import {
 
 const RegistrationForm = () => {
   const { login } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleRegistration = async (values, actions) => {
@@ -43,12 +45,7 @@ const RegistrationForm = () => {
         error.response.data &&
         error.response.data.error === "Email is already in use"
       ) {
-        actions.setFieldError("email", "Email is already in use");
-      } else {
-        actions.setFieldError(
-          "general",
-          "Registration failed. Please try again"
-        );
+        actions.setFieldError("email", "emailInUse");
       }
     }
   };
@@ -80,12 +77,18 @@ const RegistrationForm = () => {
                   fullWidth
                   name={registrationForm.formFields.name.key}
                   value={values["name"]}
-                  placeholder={registrationForm.formFields.name.label}
+                  placeholder={t(
+                    `form.${registrationForm.formFields.name.key}`
+                  )}
                   key={registrationForm.formFields.name.key}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!touched["name"] && !!errors["name"]}
-                  helperText={touched["name"] && errors["name"]}
+                  helperText={
+                    touched["name"] && errors["name"]
+                      ? t(`errors.${errors["name"]}`)
+                      : ""
+                  }
                 />
               </StyledInputContainer>
               <StyledInputContainer>
@@ -95,12 +98,18 @@ const RegistrationForm = () => {
                   fullWidth
                   name={registrationForm.formFields.email.key}
                   value={values["email"]}
-                  placeholder={registrationForm.formFields.email.label}
+                  placeholder={t(
+                    `form.${registrationForm.formFields.email.key}`
+                  )}
                   key={registrationForm.formFields.email.key}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!touched["email"] && !!errors["email"]}
-                  helperText={touched["email"] && errors["email"]}
+                  helperText={
+                    touched["email"] && errors["email"]
+                      ? t(`errors.${errors["email"]}`)
+                      : ""
+                  }
                 />
               </StyledInputContainer>
               <StyledInputContainer>
@@ -110,19 +119,25 @@ const RegistrationForm = () => {
                   type="password"
                   name={registrationForm.formFields.password.key}
                   value={values["password"]}
-                  placeholder={registrationForm.formFields.password.label}
+                  placeholder={t(
+                    `form.${registrationForm.formFields.password.key}`
+                  )}
                   key={registrationForm.formFields.password.key}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!touched["password"] && !!errors["password"]}
-                  helperText={touched["password"] && errors["password"]}
+                  helperText={
+                    touched["password"] && errors["password"]
+                      ? t(`errors.${errors["password"]}`)
+                      : ""
+                  }
                 />
               </StyledInputContainer>
             </StyledInputsWrapper>
           </StyledContainer>
           <SubmitContainer>
-            <StyledButton type="submit">Региструј се</StyledButton>
-            <StyledLink to="/login"> Улогуј се</StyledLink>
+            <StyledButton type="submit">{t("form.registrate")}</StyledButton>
+            <StyledLink to="/login"> {t("form.login")}</StyledLink>
           </SubmitContainer>
         </form>
       )}

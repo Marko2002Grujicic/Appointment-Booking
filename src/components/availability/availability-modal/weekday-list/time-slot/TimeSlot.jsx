@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/system";
 import FormikTimePicker from "../time-slot/formik-time-picker/FormikTimePicker";
-import { HelperText } from "../../../../appointment-dialog/appointment-form/date-time/date-picker/DatePicker";
+import HelperText from "../../../../common/HelperText";
 
 const TimeSlot = ({ index, onDelete, day, value, errors }) => {
   const isErrorObject = typeof errors === "object";
@@ -46,9 +46,7 @@ const TimeSlot = ({ index, onDelete, day, value, errors }) => {
           />
         </TimeSlotWrapper>
       </div>
-      <HelperText helperText={!isErrorObject && errors}>
-        {!isErrorObject && errors}
-      </HelperText>
+      <HelperText helperText={!isErrorObject && errors} />
     </>
   );
 };

@@ -47,7 +47,6 @@ export class AvailabilityAPI {
   }
 
   static async update(availability) {
-    console.log(availability);
     const userId = Number(getCookie("userId"));
     const url = `/users/${userId}/availability`;
     const formatedAvailability =

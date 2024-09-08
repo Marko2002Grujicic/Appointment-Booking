@@ -1,6 +1,7 @@
 import React from "react";
 import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { styled } from "@mui/system";
+import { useTranslation } from "react-i18next";
 
 const Guests = ({
   values,
@@ -10,9 +11,10 @@ const Guests = ({
   errors,
   emailOptions,
 }) => {
+  const { t } = useTranslation();
   return (
     <FormControl>
-      <InputLabel>Гости</InputLabel>
+      <InputLabel>{t("appointments.guests")}</InputLabel>
       <Select
         multiple
         value={values.guests}
@@ -28,9 +30,8 @@ const Guests = ({
           ) : null
         }
         error={Boolean(touched["guests"]) && Boolean(errors["guests"])}
-        placeholder="Унесите Емаил адресе"
         variant="outlined"
-        label="Гости"
+        label={t("appointments.guests")}
         name="guests"
       >
         {emailOptions.map((email) => (

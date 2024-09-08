@@ -1,6 +1,6 @@
 import React from "react";
-import WeekdayField from "./weekday-field/WeekdayField";
 import { styled } from "@mui/material";
+import WeekdayField from "./weekday-field/WeekdayField";
 import { WEEK_DAYS } from "../../../../helpers/constants";
 
 const WeekdayList = ({ setFieldValue, errors }) => {

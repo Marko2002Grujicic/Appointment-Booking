@@ -3,10 +3,12 @@ import { styled } from "@mui/system";
 import { WEEK_DAYS } from "../../../helpers/constants";
 import AvailabilityDay from "./availability-day/AvailabilityDay";
 import { colors } from "../../../helpers/colors";
+import { useTranslation } from "react-i18next";
 
 const WorkingHours = ({ availability }) => {
+  const { t } = useTranslation();
   const dailySLots = Object.values(WEEK_DAYS).map((day) => ({
-    label: day,
+    label: t(`day.${day}`),
     slots: !availability ? [] : availability[day],
   }));
   return (

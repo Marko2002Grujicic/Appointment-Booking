@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { Formik } from "formik";
+import { useTranslation } from "react-i18next";
 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
@@ -22,6 +23,7 @@ import {
 } from "../StyledComponents";
 
 const LoginForm = () => {
+  const { t } = useTranslation();
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ const LoginForm = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleLogin = async (values, actions) => {
+  const handleLogin = async (values) => {
     try {
       const response = await axios.post("http://localhost:5000/login", values, {
         withCredentials: true,
@@ -44,7 +46,6 @@ const LoginForm = () => {
         "There was an error logging in:",
         error.response?.data || error.message
       );
-      actions.setFieldError("general", "Login failed. Please try again");
     }
   };
 
@@ -75,12 +76,16 @@ const LoginForm = () => {
                   fullWidth
                   name={loginForm.formFields.email.key}
                   value={values["email"]}
-                  placeholder={loginForm.formFields.email.label}
+                  placeholder={t(`form.${loginForm.formFields.email.key}`)}
                   key={loginForm.formFields.email.key}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!touched["email"] && !!errors["email"]}
-                  helperText={touched["email"] && errors["email"]}
+                  helperText={
+                    touched["email"] && errors["email"]
+                      ? t(`errors.${errors["email"]}`)
+                      : ""
+                  }
                 />
               </StyledInputContainer>
               <StyledInputContainer>
@@ -90,12 +95,16 @@ const LoginForm = () => {
                   type="password"
                   name={loginForm.formFields.password.key}
                   value={values["password"]}
-                  placeholder={loginForm.formFields.password.label}
+                  placeholder={t(`form.${loginForm.formFields.password.key}`)}
                   key={loginForm.formFields.password.key}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!touched["password"] && !!errors["password"]}
-                  helperText={touched["password"] && errors["password"]}
+                  helperText={
+                    touched["password"] && errors["password"]
+                      ? t(`errors.${errors["password"]}`)
+                      : ""
+                  }
                 />
               </StyledInputContainer>
             </StyledInputsWrapper>

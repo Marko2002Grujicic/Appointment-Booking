@@ -6,6 +6,6 @@ export function useUserAvailabilityUpdate() {
   const invalideteUserAvailability = useInvalidateUserAvailability();
   return useMutation({
     mutationFn: AvailabilityAPI.update,
-    onSuccess: () => invalideteUserAvailability,
+    onSuccess: () => invalideteUserAvailability(),
   });
 }

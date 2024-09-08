@@ -1,32 +1,40 @@
 import React, { useContext } from "react";
-import { Dialog, useTheme, useMediaQuery } from "@mui/material";
+import { useTheme, useMediaQuery } from "@mui/material";
 import { DialogContext } from "../../context/DialogContext";
 import AppointmentForm from "./appointment-form/AppointmentForm";
 import {
+  StyledDialog,
   StyledDialogContent,
   StyledDialogTitle,
 } from "../../pages/login-and-registration/StyledComponents";
+import { useTranslation } from "react-i18next";
 
 const AppointmentDialog = () => {
+  const { t } = useTranslation();
   const { isOpen, setIsOpen, selectedEvent } = useContext(DialogContext);
   const toggleModal = (prev) => setIsOpen(!prev);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Dialog
+    <StyledDialog
       fullScreen={isMobile}
       open={isOpen}
-      onClose={toggleModal}
+      onClose={(event, reason) => {
+        if (reason === "backdropClick") return;
+        toggleModal();
+      }}
       id="appointment-dialog"
     >
       <StyledDialogTitle>
-        {selectedEvent ? "Измени Састанак" : "Креирајте Састанак"}
+        {selectedEvent
+          ? t("appointments.editAppointment")
+          : t("appointments.createAppointment")}
       </StyledDialogTitle>
-      <StyledDialogContent ismobile={isMobile ? "true" : undefined}>
+      <StyledDialogContent>
         <AppointmentForm eventData={selectedEvent} />
       </StyledDialogContent>
-    </Dialog>
+    </StyledDialog>
   );
 };
 

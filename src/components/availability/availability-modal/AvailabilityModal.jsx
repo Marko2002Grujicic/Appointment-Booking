@@ -1,19 +1,22 @@
 import React, { useCallback } from "react";
 import { Formik } from "formik";
-import { Dialog, useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import WeekdayList from "../availability-modal/weekday-list/WeekdayList";
 import { availabilitySchema } from "../availabilitySchema";
-import { useUserAvailability } from "../helper/useUserAvailability";
-import { useUserAvailabilityUpdate } from "../helper/useUserAvailabilityUpdate";
+import { useUserAvailability } from "../api/useUserAvailability";
+import { useUserAvailabilityUpdate } from "../api/useUserAvailabilityUpdate";
 import { AVAILABILITY_INITIAL_VALUES } from "../../../helpers/constants";
 import {
   DialogButton,
+  StyledDialog,
   StyledDialogActions,
   StyledDialogContent,
   StyledDialogTitle,
 } from "../../../pages/login-and-registration/StyledComponents";
+import { useTranslation } from "react-i18next";
 
 const AvailabilityModal = ({ isOpen, setIsOpen }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { isLoading, data, error } = useUserAvailability();
@@ -22,7 +25,6 @@ const AvailabilityModal = ({ isOpen, setIsOpen }) => {
 
   const handleSubmitting = useCallback(
     async (values) => {
-      console.log("Submit handler triggered with values:", values);
       try {
         await updateAvailability(values);
       } catch (error) {
@@ -36,13 +38,15 @@ const AvailabilityModal = ({ isOpen, setIsOpen }) => {
   if (error || updateError) return <div>There was an Error</div>;
 
   return (
-    <Dialog
+    <StyledDialog
       id="availability-modal"
       fullScreen={isMobile}
       open={isOpen}
       onClose={(prev) => setIsOpen(!prev)}
     >
-      <StyledDialogTitle>Измените Доступност</StyledDialogTitle>
+      <StyledDialogTitle>
+        {t("availability.editAvailability")}
+      </StyledDialogTitle>
       <StyledDialogContent ismobile={isMobile ? "true" : undefined}>
         <Formik
           initialValues={data || AVAILABILITY_INITIAL_VALUES}
@@ -54,15 +58,20 @@ const AvailabilityModal = ({ isOpen, setIsOpen }) => {
               <WeekdayList setFieldValue={setFieldValue} errors={errors} />
               <StyledDialogActions>
                 <DialogButton onClick={(prev) => setIsOpen(!prev)}>
-                  Откажи
+                  {t("form.cancel")}
                 </DialogButton>
-                <DialogButton type="submit">Сачувај</DialogButton>
+                <DialogButton
+                  type="submit"
+                  onClick={(prev) => setIsOpen(!prev)}
+                >
+                  {t("form.submit")}
+                </DialogButton>
               </StyledDialogActions>
             </form>
           )}
         </Formik>
       </StyledDialogContent>
-    </Dialog>
+    </StyledDialog>
   );
 };
 

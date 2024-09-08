@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Box, styled } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -8,24 +8,20 @@ import listPlugin from "@fullcalendar/list";
 import srLocale from "@fullcalendar/core/locales/sr-cyrl";
 
 import { DialogContext } from "../../context/DialogContext";
-import { EventsContext } from "../../context/EventsContext";
 import { handleDateClick } from "./helper/calendar-helper";
 import { timeFormat } from "./helper/calendar-schema";
-import { fetchEvents, fetchData } from "../../helpers/fetch/fetch";
+import { fetchData } from "../../helpers/fetch/fetch";
 import "./Calendar.css";
+import { useAppontments } from "../appointment-dialog/api/useAppointments";
 
 const CalendarComponent = () => {
-  const { events, setEvents } = useContext(EventsContext);
+  const { isLoading, data: events, error } = useAppontments();
   const { setIsOpen, setSelectedEvent } = useContext(DialogContext);
   const toggleModal = () => setIsOpen(true);
 
-  useEffect(() => {
-    fetchEvents(setEvents);
-  }, [setEvents]);
-
   const handleEventClick = async (clickInfo) => {
     const eventId = Number(clickInfo.event.id);
-    const url = `/meetings/${eventId}`;
+    const url = `/appointments/${eventId}`;
 
     try {
       const eventData = await fetchData(url);
@@ -61,6 +57,9 @@ const CalendarComponent = () => {
     center: "title",
     right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
 
   return (
     <StyledCalendarWrapper>

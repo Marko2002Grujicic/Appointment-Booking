@@ -8,25 +8,19 @@ export const registrationForm = {
   },
   formFields: {
     name: {
-      label: "Име и Презиме",
       key: "name",
     },
     email: {
-      label: "Е-пошта",
       key: "email",
     },
     password: {
-      label: "Шифра",
       key: "password",
     },
   },
   schema: yup.object().shape({
-    name: yup.string().required("Поље је обавезно"),
-    email: yup
-      .string()
-      .email("Адреса Е-поште није валидна")
-      .required("Поље је обавезно"),
-    password: yup.string().required("Поље је обавезно"),
+    name: yup.string().required("required"),
+    email: yup.string().email("wrongFormat").required("requried"),
+    password: yup.string().required("required"),
   }),
 };
 
@@ -37,19 +31,14 @@ export const loginForm = {
   },
   formFields: {
     email: {
-      label: "Е-пошта",
       key: "email",
     },
     password: {
-      label: "Шифра",
       key: "password",
     },
   },
   schema: yup.object().shape({
-    email: yup
-      .string()
-      .email("Адреса Е-поште није валидна")
-      .required("Поље је обавезно"),
-    password: yup.string().required("Поље је обавезно"),
+    email: yup.string().email("wrongFormat").required("required"),
+    password: yup.string().required("required"),
   }),
 };

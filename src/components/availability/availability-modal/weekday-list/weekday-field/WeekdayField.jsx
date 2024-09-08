@@ -5,8 +5,10 @@ import { Field } from "formik";
 import { uniqueId } from "lodash";
 import TimeSlot from "../time-slot/TimeSlot";
 import { colors } from "../../../../../helpers/colors";
+import { useTranslation } from "react-i18next";
 
 const WeekdayField = ({ day, setFieldValue, errors }) => {
+  const { t } = useTranslation();
   const handleTimeChange = (updatedSlots) => {
     setFieldValue(day, updatedSlots);
   };
@@ -22,10 +24,9 @@ const WeekdayField = ({ day, setFieldValue, errors }) => {
         return (
           <WeekDayContainer>
             <RowContainer>
-              <FormControlLabel
-                sx={{ textTransform: "capitalize", width: "110px" }}
+              <FormLabel
                 control={<Checkbox checked={Boolean(value?.length)} />}
-                label={day}
+                label={t(`day.${day}`)}
                 onChange={(event) =>
                   handleTimeChange(event.target.checked ? defaultTime : [])
                 }
@@ -91,4 +92,9 @@ const RowContainer = styled("div")({
 
 const SlotStack = styled(Stack)({
   gap: "10px",
+});
+
+const FormLabel = styled(FormControlLabel)({
+  textTransform: "capitalize",
+  width: "110px",
 });

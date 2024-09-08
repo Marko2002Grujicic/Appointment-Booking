@@ -2,6 +2,7 @@ import React from "react";
 import { styled } from "@mui/system";
 import DatePicker from "./date-picker/DatePicker";
 import TimeSelect from "./time-select/TimeSelect";
+import { useTranslation } from "react-i18next";
 
 const DateTimePicker = ({
   values,
@@ -15,6 +16,7 @@ const DateTimePicker = ({
   setSelectedDate,
   setFieldValue,
 }) => {
+  const { t } = useTranslation();
   return (
     <Container>
       <DatePicker
@@ -30,7 +32,7 @@ const DateTimePicker = ({
       <FlexBox>
         <TimeSelect
           name="start"
-          label="Почетак"
+          label={t("form.start")}
           disabled={!Boolean(selectedDate)}
           value={values.start}
           onChange={handleChange}
@@ -38,9 +40,9 @@ const DateTimePicker = ({
           helperText={touched["start"] && errors["start"]}
           timeIntervals={timeIntervals}
         />
-        <TimeSpan>до</TimeSpan>
+        <TimeSpan>{t("form.to")}</TimeSpan>
         <TimeSelect
-          label="Крај"
+          label={t("form.end")}
           name="end"
           disabled={!Boolean(values.start)}
           value={values.end}

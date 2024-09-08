@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 import { styled } from "@mui/system";
 import { formatSecondsToTime, timeToMinutes } from "../../helpers/timeAdapters";
 
-const TimePicker = ({ value, onTimeChange, errors }) => {
+const TimePicker = ({ value, onTimeChange }) => {
   const createTimeStamp = useCallback((time) => formatSecondsToTime(time), []);
 
   const handleInputChange = useCallback(

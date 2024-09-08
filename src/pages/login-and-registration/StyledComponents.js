@@ -2,6 +2,7 @@ import { styled } from "@mui/system";
 import {
   Box,
   Button,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -122,14 +123,21 @@ export const DialogButton = styled(Button)(({ theme }) => ({
     theme.palette.mode !== "light" ? colors.light.primary : colors.dark.primary,
 }));
 
-export const StyledDialogActions = styled(DialogActions)(({ theme }) => ({
-  background:
-    theme.palette.mode !== "light" ? colors.dark.primary : colors.light.primary,
+export const DeleteButton = styled(Button)(({ theme }) => ({
+  background: colors.error,
+  color: colors.light.primary,
+  "&:hover": {
+    color:
+      theme.palette.mode !== "light"
+        ? colors.light.primary
+        : colors.dark.primary,
+  },
 }));
 
-export const StyledDialogContent = styled(DialogContent)(
-  ({ theme, ismobile }) => ({
-    width: ismobile ? "100%" : "500px",
+export const StyledDialogActions = styled(DialogActions)(
+  ({ theme, spacebetween }) => ({
+    justifyContent: spacebetween && "space-between",
+    marginTop: "8px",
     background:
       theme.palette.mode !== "light"
         ? colors.dark.primary
@@ -137,7 +145,26 @@ export const StyledDialogContent = styled(DialogContent)(
   })
 );
 
-export const StyledDialogTitle = styled(DialogTitle)(() => ({ theme }) => ({
+export const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
+  width: "700px",
   background:
     theme.palette.mode !== "light" ? colors.dark.primary : colors.light.primary,
+  "@media all and (max-width: 1000px)": {
+    width: "500px",
+  },
+  "@media all and (max-width: 600px)": {
+    width: "100%",
+  },
+}));
+
+export const StyledDialogTitle = styled(DialogTitle)(() => ({ theme }) => ({
+  width: "100%",
+  background:
+    theme.palette.mode !== "light" ? colors.dark.primary : colors.light.primary,
+}));
+
+export const StyledDialog = styled(Dialog)(() => () => ({
+  ".css-1qxadfk-MuiPaper-root-MuiDialog-paper": {
+    maxWidth: "700px",
+  },
 }));

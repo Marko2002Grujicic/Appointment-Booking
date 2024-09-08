@@ -1,8 +1,8 @@
 import React from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { styled } from "@mui/system";
-import { HelperText } from "../date-picker/DatePicker";
 import { filteredTimeSlots } from "../../../../../helpers/timeAdapters";
+import HelperText from "../../../../common/HelperText";
 
 const TimeSelect = ({
   value,
@@ -48,7 +48,7 @@ const TimeSelect = ({
           );
         })}
       </Select>
-      <HelperText helperText={helperText}>{helperText}</HelperText>
+      <HelperText helperText={helperText} />
     </StyledFormControl>
   );
 };

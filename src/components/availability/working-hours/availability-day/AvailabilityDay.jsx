@@ -3,8 +3,10 @@ import { faCheckCircle, faCancel } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatSecondsToTime } from "../../../../helpers/timeAdapters";
+import { useTranslation } from "react-i18next";
 
 const AvailabilityDay = ({ day, daySlots }) => {
+  const { t } = useTranslation();
   const isDayEmpty = !daySlots || daySlots.length === 0;
   const shownIcon = isDayEmpty ? faCancel : faCheckCircle;
   const orderedSlots = daySlots
@@ -29,7 +31,9 @@ const AvailabilityDay = ({ day, daySlots }) => {
               <Time>{formatSecondsToTime(slot.start)}</Time>
               <Divider>-</Divider>
               <Time>{formatSecondsToTime(slot.end)}</Time>
-              {orderedSlots.length - 1 !== index && <And>and</And>}
+              {orderedSlots.length - 1 !== index && (
+                <And>{t("availability.and")}</And>
+              )}
             </p>
           );
         })}

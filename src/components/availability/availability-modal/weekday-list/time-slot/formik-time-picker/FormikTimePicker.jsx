@@ -2,7 +2,7 @@ import React from "react";
 import { Field } from "formik";
 import { styled } from "@mui/system";
 import TimePicker from "../../../../../common/TimePicker";
-import { HelperText } from "../../../../../appointment-dialog/appointment-form/date-time/date-picker/DatePicker";
+import HelperText from "../../../../../common/HelperText";
 
 const FormikTimePicker = ({
   name,
@@ -33,12 +33,8 @@ const FormikTimePicker = ({
 
         return (
           <Container>
-            <TimePicker
-              value={value}
-              onTimeChange={handleTimeChange}
-              errors={errors}
-            />
-            <HelperText helperText={true}>{errors}</HelperText>
+            <TimePicker value={value} onTimeChange={handleTimeChange} />
+            <HelperText helperText={errors} />
           </Container>
         );
       }}

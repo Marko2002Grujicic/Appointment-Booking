@@ -3,29 +3,34 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { DialogProvider } from "./context/DialogContext";
 import { AuthProvider } from "./context/AuthProvider";
-import { EventsProvider } from "./context/EventsContext";
-import { AvailabilityProvider } from "./context/AvailabilityContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
 import "./index.css";
+import initializeI18n from "./i18n";
 
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <AvailabilityProvider>
+
+const renderApp = () => {
+  root.render(
+    <React.StrictMode>
+      <BrowserRouter>
         <DialogProvider>
-          <EventsProvider>
-            <AuthProvider>
-              <QueryClientProvider client={queryClient}>
-                <App />
-              </QueryClientProvider>
-            </AuthProvider>
-          </EventsProvider>
+          <AuthProvider>
+            <QueryClientProvider client={queryClient}>
+              <App />
+            </QueryClientProvider>
+          </AuthProvider>
         </DialogProvider>
-      </AvailabilityProvider>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+};
+
+initializeI18n()
+  .then(renderApp)
+  .catch((error) => {
+    console.error("Error initializing i18n:", error);
+    renderApp();
+  });

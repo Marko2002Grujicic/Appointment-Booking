@@ -36,55 +36,14 @@ export async function editData(data, url) {
   );
 }
 
-export async function fetchUserAvailability(userId) {
-  if (!userId) return;
-  try {
-    const response = await axios.get(
-      `${baseAPIUrl}/users/${userId}/availability`
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching user availability:", error.message);
-    return {};
-  }
-}
-
-export const fetchEvents = async (setter) => {
-  try {
-    const events = await fetchData("/meetings");
-    setter(events);
-  } catch (error) {
-    console.error("Error fetching events:", error);
-  }
-};
-
-export const fetchUserEmails = async () => {
-  try {
-    return await fetchData(`/user-emails`);
-  } catch (error) {
-    console.error("Error fetching user emails:", error);
-    return [];
-  }
-};
-
-export const editMeeting = async (eventId, formattedEvent) => {
-  const token = getCookie("authToken");
-  const url = `/meetings/${eventId}`;
-
-  if (!formattedEvent || !token) return;
-  return await editData(formattedEvent, url);
-};
-
-export const createMeeting = async (formattedEvent) => {
+export async function createData(data, url) {
   const userId = getCookie("userId");
   const token = getCookie("authToken");
-
-  if (!formattedEvent || !userId || !token) return;
-
+  if (!token || !data || !url || !userId) return;
   return await axios.post(
-    `${baseAPIUrl}/meetings`,
+    `${baseAPIUrl}${url}`,
     {
-      ...formattedEvent,
+      ...data,
       userId,
     },
     {
@@ -93,4 +52,23 @@ export const createMeeting = async (formattedEvent) => {
       },
     }
   );
+}
+
+export async function deleteData(url) {
+  const token = getCookie("authToken");
+  if (!token || !url) return;
+  return await axios.delete(`${baseAPIUrl}${url}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export const fetchUserEmails = async () => {
+  try {
+    return await fetchData(`/user-emails`);
+  } catch (error) {
+    console.error("Error fetching user emails:", error);
+    return [];
+  }
 };
