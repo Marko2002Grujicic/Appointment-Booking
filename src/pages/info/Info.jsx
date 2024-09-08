@@ -14,13 +14,13 @@ import PageWrapper from "../../components/common/PageWrapper";
 const info = [
   {
     icon: faHouse,
-    text: "Adresa: Aleksandra Medvedeva 20, 18000 Niš, Srbija",
+    text: "Адреса: Александра Медведева 20, 18000 Ниш, Србија",
   },
-  { icon: faBook, text: "Informacije o upisu: 060 3677400" },
-  { icon: faPhone, text: "Telefon: Centrala +381 18 588 211" },
-  { icon: faPhone, text: "Telefon: Studentska služba +381 18 588 039" },
-  { icon: faEnvelope, text: "Imejl: info@akademijanis.edu.rs" },
-  { icon: faClock, text: "Ponedeljak-Petak: 08h - 20h" },
+  { icon: faBook, text: "Информације о упису: 060 3677400" },
+  { icon: faPhone, text: "Телефон: Централа +381 18 588 211" },
+  { icon: faPhone, text: "Телефон: Студенска служба +381 18 588 039" },
+  { icon: faEnvelope, text: "Имејл: info@akademijanis.edu.rs" },
+  { icon: faClock, text: "Понедељак-Петак: 08h - 20h" },
 ];
 
 const Info = () => {

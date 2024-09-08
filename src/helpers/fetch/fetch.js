@@ -21,6 +21,21 @@ export async function fetchData(url) {
   }
 }
 
+export async function editData(data, url) {
+  const token = getCookie("authToken");
+  if (!token || !data || !url) return;
+
+  return await axios.put(
+    `${baseAPIUrl}${url}`,
+    { ...data },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
 export async function fetchUserAvailability(userId) {
   if (!userId) return;
   try {
@@ -54,19 +69,10 @@ export const fetchUserEmails = async () => {
 
 export const editMeeting = async (eventId, formattedEvent) => {
   const token = getCookie("authToken");
+  const url = `/meetings/${eventId}`;
 
   if (!formattedEvent || !token) return;
-  return await axios.put(
-    `${baseAPIUrl}/meetings/${eventId}`,
-    {
-      ...formattedEvent,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  return await editData(formattedEvent, url);
 };
 
 export const createMeeting = async (formattedEvent) => {

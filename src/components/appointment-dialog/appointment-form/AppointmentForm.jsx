@@ -2,29 +2,33 @@ import React, { useContext, useState, useEffect } from "react";
 import moment from "moment";
 import { styled } from "@mui/system";
 import { Formik } from "formik";
-import { Stack, DialogActions, Button, TextField } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import { DialogContext } from "../../../context/DialogContext";
 import { EventsContext } from "../../../context/EventsContext";
+import { AvailabilityContext } from "../../../context/AvailabilityContext";
 import { appointmentFormSchema } from "./appointmentFormSchema";
-import { formatEventToAPI } from "./../../../helpers/formatEventToApi";
-import { validateTimeSelection } from "./../../../helpers/validateTimeSelection";
+import { formatEventToAPI } from "../../../helpers/formatEventToApi";
+import { validateTimeSelection } from "../../../helpers/validateTimeSelection";
 import {
   fetchEvents,
-  fetchUserAvailability,
   fetchUserEmails,
   editMeeting,
   createMeeting,
 } from "../../../helpers/fetch/fetch";
-import { generateTimeIntervals } from "./../../../helpers/timeAdapters";
+import { generateTimeIntervals } from "../../../helpers/timeAdapters";
 import { getCookie } from "../../../helpers/cookies/cookies";
 import DateTimePicker from "./date-time/DateTimePicker";
 import Guests from "./guests/Guests";
+import {
+  DialogButton,
+  StyledDialogActions,
+} from "../../../pages/login-and-registration/StyledComponents";
 
 const AppointmentForm = ({ eventData }) => {
   const userId = Number(getCookie("userId"));
   const { setIsOpen } = useContext(DialogContext);
   const { setEvents } = useContext(EventsContext);
-  const [userAvailability, setUserAvailability] = useState(null);
+  const { userAvailability } = useContext(AvailabilityContext);
   const [emailOptions, setEmailOptions] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
     eventData
@@ -48,20 +52,11 @@ const AppointmentForm = ({ eventData }) => {
   };
 
   useEffect(() => {
-    const fetchAvailability = async () => {
-      try {
-        const response = await fetchUserAvailability(userId);
-        setUserAvailability(response);
-      } catch (error) {
-        console.error("Error fetching availability:", error.message);
-      }
-    };
     const loadEmails = async () => {
       const emails = await fetchUserEmails();
       setEmailOptions(emails);
     };
     loadEmails();
-    fetchAvailability();
   }, [userId]);
 
   useEffect(() => {
@@ -195,25 +190,18 @@ const AppointmentForm = ({ eventData }) => {
             />
           </StyledStack>
           <StyledDialogActions>
-            <StyledButton onClick={() => setIsOpen((prev) => !prev)}>
+            <DialogButton onClick={() => setIsOpen((prev) => !prev)}>
               Откажи
-            </StyledButton>
-            <StyledButton disabled={isLoading} type="submit">
+            </DialogButton>
+            <DialogButton disabled={isLoading} type="submit">
               Закажи
-            </StyledButton>
+            </DialogButton>
           </StyledDialogActions>
         </FormContainer>
       )}
     </Formik>
   );
 };
-
-const StyledButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.mode === "light" ? "#1E1E2D" : "#F2F4F7",
-}));
-const StyledDialogActions = styled(DialogActions)(({ theme }) => ({
-  background: theme.palette.mode !== "light" ? "#1E1E2D" : "#F2F4F7",
-}));
 
 const FormContainer = styled("form")(() => ({
   width: "100%",

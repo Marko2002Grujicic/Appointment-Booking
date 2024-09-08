@@ -1,6 +1,14 @@
 import { styled } from "@mui/system";
-import { Box, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 import { Link } from "react-router-dom";
+import { colors } from "../../helpers/colors";
 
 export const StyledContainer = styled("div")(() => ({
   display: "flex",
@@ -33,7 +41,9 @@ export const StyledInputContainer = styled("div")(({ theme }) => ({
   maxWidth: "480px",
   height: "80px",
   borderRadius: "5px",
-  border: `1px solid ${theme.palette.mode !== "light" ? "#52525E" : "#c4c4c4"}`,
+  border: `1px solid ${
+    theme.palette.mode !== "light" ? colors.dark.border : colors.light.border
+  }`,
 }));
 
 export const StyledInput = styled(TextField)(({ theme, error }) => ({
@@ -44,13 +54,17 @@ export const StyledInput = styled(TextField)(({ theme, error }) => ({
   marginRight: 50,
   height: "50px",
   border: "none",
-  background: theme.palette.mode !== "light" ? "#1E1E2D" : "#F2F4F7",
-  color: theme.palette.mode === "light" ? "#1E1E2D" : "#F2F4F7",
+  background:
+    theme.palette.mode !== "light" ? colors.dark.primary : colors.light.primary,
+  color:
+    theme.palette.mode !== "light" ? colors.light.primary : colors.dark.primary,
   "& .css-p51h6s-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill, .css-p51h6s-MuiInputBase-input-MuiOutlinedInput-input, .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input  ":
     {
       paddingBottom: error ? "0px" : "16px",
       WebkitBoxShadow: `0 0 0 100px ${
-        theme.palette.mode !== "light" ? "#1E1E2D" : "#F2F4F7"
+        theme.palette.mode !== "light"
+          ? colors.dark.primary
+          : colors.light.primary
       } inset`,
       borderRadius: 0,
     },
@@ -67,7 +81,8 @@ export const StyledLink = styled(Link)(({ theme }) => ({
   width: "fit-content",
   fontSize: "13px",
   fontWeight: "500",
-  color: theme.palette.mode === "light" ? "#009ef7" : "#6ea2f5",
+  color:
+    theme.palette.mode !== "light" ? colors.light.button : colors.dark.button,
   border: "none",
   textTransform: "initial",
   textDecoration: "none",
@@ -97,6 +112,32 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   width: "150px",
   fontSize: "16px",
   "&:hover": {
-    background: theme.palette.mode === "light" ? "#009ef7" : "#6ea2f5",
+    background:
+      theme.palette.mode !== "light" ? colors.dark.button : colors.light.button,
   },
+}));
+
+export const DialogButton = styled(Button)(({ theme }) => ({
+  color:
+    theme.palette.mode !== "light" ? colors.light.primary : colors.dark.primary,
+}));
+
+export const StyledDialogActions = styled(DialogActions)(({ theme }) => ({
+  background:
+    theme.palette.mode !== "light" ? colors.dark.primary : colors.light.primary,
+}));
+
+export const StyledDialogContent = styled(DialogContent)(
+  ({ theme, ismobile }) => ({
+    width: ismobile ? "100%" : "500px",
+    background:
+      theme.palette.mode !== "light"
+        ? colors.dark.primary
+        : colors.light.primary,
+  })
+);
+
+export const StyledDialogTitle = styled(DialogTitle)(() => ({ theme }) => ({
+  background:
+    theme.palette.mode !== "light" ? colors.dark.primary : colors.light.primary,
 }));

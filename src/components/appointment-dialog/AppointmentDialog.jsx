@@ -1,16 +1,13 @@
 import React, { useContext } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
-import { styled } from "@mui/system";
+import { Dialog, useTheme, useMediaQuery } from "@mui/material";
 import { DialogContext } from "../../context/DialogContext";
 import AppointmentForm from "./appointment-form/AppointmentForm";
+import {
+  StyledDialogContent,
+  StyledDialogTitle,
+} from "../../pages/login-and-registration/StyledComponents";
 
-const BookAppointmentDialog = () => {
+const AppointmentDialog = () => {
   const { isOpen, setIsOpen, selectedEvent } = useContext(DialogContext);
   const toggleModal = (prev) => setIsOpen(!prev);
   const theme = useTheme();
@@ -33,13 +30,4 @@ const BookAppointmentDialog = () => {
   );
 };
 
-export default BookAppointmentDialog;
-
-const StyledDialogContent = styled(DialogContent)(({ theme, ismobile }) => ({
-  width: ismobile ? "100%" : "500px",
-  background: theme.palette.mode !== "light" ? "#1E1E2D" : "#F2F4F7",
-}));
-
-const StyledDialogTitle = styled(DialogTitle)(() => ({ theme }) => ({
-  background: theme.palette.mode !== "light" ? "#1E1E2D" : "#F2F4F7",
-}));
+export default AppointmentDialog;

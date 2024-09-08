@@ -1,4 +1,4 @@
-const formatSecondsToTime = (seconds) => {
+export const formatSecondsToTime = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
@@ -35,21 +35,18 @@ export const generateTimeIntervals = (
         currentTimeInSeconds = nextTimeInSeconds;
       }
     });
-  } else {
-    console.log("No slots available for this day.");
   }
-
   return timeIntervals;
 };
 
-export const transformSchedule = (schedule) => {
+const transformSchedule = (schedule) => {
   return schedule.map(({ start, end }) => ({
     start: formatSecondsToTime(start),
     end: formatSecondsToTime(end),
   }));
 };
 
-const timeToMinutes = (timeStr) => {
+export const timeToMinutes = (timeStr) => {
   const [hours, minutes] = timeStr.split(":").map(Number);
   return hours * 60 + minutes;
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { styled } from "@mui/system";
+import { colors } from "../../../../../helpers/colors";
 
 const DatePicker = (props) => {
   return (
@@ -23,7 +24,7 @@ const StyledWrapper = styled("div")(() => ({
 
 export const HelperText = styled("p")(({ helperText }) => ({
   display: !helperText ? "none" : "block",
-  color: "#f44336",
+  color: colors.error,
   fontWeight: 400,
   fontSize: "0.6428571428571428rem",
   lineHeight: 1.66,
@@ -41,21 +42,25 @@ const StyledDateInput = styled("input")(({ theme, helperText }) => ({
   lineHeight: "1.4em",
   borderRadius: "5px",
   border: helperText
-    ? "1px solid #F44336"
-    : `1px solid ${theme.palette.mode === "dark" ? "#52525E" : "#c4c4c4"}`,
-  background: theme.palette.mode === "dark" ? "#1E1E2D" : "#F2F4F7",
-  color: theme.palette.mode !== "dark" ? "#1E1E2D" : "#F2F4F7",
+    ? `1px solid ${colors.error}`
+    : `1px solid ${
+        theme.palette.mode === "dark" ? colors.dark.border : colors.light.border
+      }`,
+  background:
+    theme.palette.mode === "dark" ? colors.dark.primary : colors.light.primary,
+  color:
+    theme.palette.mode !== "dark" ? colors.dark.primary : colors.light.primary,
   "& input": {
     height: 56.92,
   },
   "&:hover": {
     border: helperText
-      ? "1px solid #F44336"
-      : `1px solid ${theme.palette.mode === "dark" ? "#fff" : "black"}`,
+      ? `1px solid ${colors.error}`
+      : `1px solid ${theme.palette.mode === "dark" ? "#fff" : "#000"}`,
   },
   "&:focus": {
     border: helperText
-      ? "1px solid #F44336"
+      ? `1px solid ${colors.error}`
       : `1px solid ${theme.palette.mode === "dark" ? "#fff" : "#d0d4dd"}`,
     outline: "none",
   },

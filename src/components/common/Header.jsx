@@ -9,12 +9,24 @@ const Header = ({ title }) => (
 
 const Wrapper = styled("div")(() => ({
   marginBottom: "40px",
+  "@media all and (max-width: 1000px)": {
+    marginBottom: "30px",
+  },
+  "@media all and (max-width: 375px)": {
+    marginBottom: "20px",
+  },
 }));
 const Title = styled(Typography)(() => ({
   fontSize: "32px",
   fontWeight: "bold",
   letterSpacing: "-0.025em",
-  textDecorationColor: "#0f172a",
+
+  "@media all and (max-width: 1000px)": {
+    fontSize: "26px",
+  },
+  "@media all and (max-width: 375px)": {
+    fontSize: "16px",
+  },
 }));
 
 export default Header;

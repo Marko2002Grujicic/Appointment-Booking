@@ -12,7 +12,7 @@ import Info from "./pages/info/Info";
 import Settings from "./pages/settings/Settings";
 import LoginForm from "./pages/login-and-registration/login-form/LoginForm";
 import RegistrationForm from "./pages/login-and-registration/registration-form/RegistrationForm";
-import BookAppointmentDialog from "./components/book-appointment-dialog/BookAppointmentDialog";
+import AppointmentDialog from "./components/appointment-dialog/AppointmentDialog";
 import ProtectedRoute from "./components/protected-route/ProtectedRoute";
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
           {isAuthenticated && <SidebarComponent />}
           <main className="content">
             <Navbar />
-            <BookAppointmentDialog />
+            <AppointmentDialog />
             <Routes>
               <Route path="/login" element={<LoginForm />} />
               <Route path="/registration" element={<RegistrationForm />} />

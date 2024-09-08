@@ -33,6 +33,7 @@ export const tokens = (mode) => ({
           default: "#1E1E2D",
           reversed: "#F2F4F7",
         },
+        button: "#6ea2f5",
       }
     : {
         grey: {
@@ -58,10 +59,7 @@ export const tokens = (mode) => ({
           900: "#e0edff",
         },
         error: "#F44336",
-        button: {
-          lighter: "#009ef7",
-          darker: "#6ea2f5",
-        },
+        button: "#009ef7",
         background: {
           default: "#F2F4F7",
           reversed: "#1E1E2D",

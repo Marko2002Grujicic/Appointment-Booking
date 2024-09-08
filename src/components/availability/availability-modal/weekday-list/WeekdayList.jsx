@@ -1,23 +1,17 @@
 import React from "react";
-import WeekdayField from "./WeekdayField";
+import WeekdayField from "./weekday-field/WeekdayField";
 import { styled } from "@mui/material";
+import { WEEK_DAYS } from "../../../../helpers/constants";
 
-const WEEK_DAYS = Object.freeze({
-  MONDAY: "monday",
-  TUESDAY: "tuesday",
-  WEDNESDAY: "wednesday",
-  THURSDAY: "thursday",
-  FRIDAY: "friday",
-});
-
-const WeekdayList = ({ availability }) => {
+const WeekdayList = ({ setFieldValue, errors }) => {
   return (
     <Wrapper>
       {Object.values(WEEK_DAYS).map((day) => (
         <WeekdayField
-          key={`${day}-${day.start}`}
+          key={day}
           day={day}
-          timeSlots={availability[day]}
+          setFieldValue={setFieldValue}
+          errors={errors[day]}
         />
       ))}
     </Wrapper>
