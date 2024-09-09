@@ -1,7 +1,6 @@
 import React from "react";
 import {
   SettingsOutlined,
-  ImportContacts,
   CalendarTodayOutlined,
   Add,
 } from "@mui/icons-material";
@@ -24,11 +23,6 @@ const navItems = [
     title: "Подешавања",
     to: "/settings",
     icon: <SettingsOutlined />,
-  },
-  {
-    title: "Помоћ",
-    to: "/info",
-    icon: <ImportContacts />,
   },
 ];
 

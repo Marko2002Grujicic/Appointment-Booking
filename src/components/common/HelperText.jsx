@@ -3,15 +3,18 @@ import { styled } from "@mui/system";
 import { colors } from "../../helpers/colors";
 import { useTranslation } from "react-i18next";
 
-const HelperText = ({ helperText }) => {
+const HelperText = ({ helperText, overlap }) => {
   const { t } = useTranslation();
-  return helperText && <Text>{t(`errors.${helperText}`)}</Text>;
+  return (
+    helperText && <Text overlap={overlap}>{t(`errors.${helperText}`)}</Text>
+  );
 };
 
 export default HelperText;
 
-const Text = styled("p")(() => ({
+const Text = styled("p")(({ overlap }) => ({
   color: colors.error,
+  position: overlap ? "absolute" : "static",
   fontWeight: 400,
   fontSize: "0.6428571428571428rem",
   lineHeight: 1.66,

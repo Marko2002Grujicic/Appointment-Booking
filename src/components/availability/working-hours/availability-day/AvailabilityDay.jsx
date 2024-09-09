@@ -4,6 +4,7 @@ import { styled } from "@mui/system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatSecondsToTime } from "../../../../helpers/timeAdapters";
 import { useTranslation } from "react-i18next";
+import { colors } from "../../../../helpers/colors";
 
 const AvailabilityDay = ({ day, daySlots }) => {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ const AvailabilityDay = ({ day, daySlots }) => {
           icon={shownIcon}
           style={{
             fontSize: "16px",
-            color: isDayEmpty ? "red" : "lightGreen",
+            color: isDayEmpty ? colors.error : colors.checkmark,
           }}
         />
         {day}

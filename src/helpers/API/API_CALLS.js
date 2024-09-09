@@ -5,9 +5,7 @@ const baseAPIUrl = `http://localhost:5000`;
 
 export async function fetchData(url) {
   const token = getCookie("authToken");
-  if (!token) {
-    throw new Error("No token found. Please log in.");
-  }
+  if (!token) return;
 
   try {
     const response = await axios.get(`${baseAPIUrl}${url}`, {
@@ -63,12 +61,3 @@ export async function deleteData(url) {
     },
   });
 }
-
-export const fetchUserEmails = async () => {
-  try {
-    return await fetchData(`/user-emails`);
-  } catch (error) {
-    console.error("Error fetching user emails:", error);
-    return [];
-  }
-};

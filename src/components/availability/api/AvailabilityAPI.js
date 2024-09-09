@@ -1,5 +1,5 @@
 import { uniqueId } from "lodash";
-import { editData, fetchData } from "../../../helpers/fetch/fetch";
+import { editData, fetchData } from "../../../helpers/API/API_CALLS";
 import { getCookie } from "../../../helpers/cookies/cookies";
 
 export class AvailabilityAPI {

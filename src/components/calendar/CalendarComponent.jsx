@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Box, styled } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -6,18 +6,33 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import srLocale from "@fullcalendar/core/locales/sr-cyrl";
+import enLocale from "@fullcalendar/core/locales/en-gb";
 
+import { useAppontments } from "../appointment-dialog/api/useAppointments";
 import { DialogContext } from "../../context/DialogContext";
 import { handleDateClick } from "./helper/calendar-helper";
 import { timeFormat } from "./helper/calendar-schema";
-import { fetchData } from "../../helpers/fetch/fetch";
+import { fetchData } from "../../helpers/API/API_CALLS";
+import { getCookie } from "../../helpers/cookies/cookies";
 import "./Calendar.css";
-import { useAppontments } from "../appointment-dialog/api/useAppointments";
 
 const CalendarComponent = () => {
   const { isLoading, data: events, error } = useAppontments();
   const { setIsOpen, setSelectedEvent } = useContext(DialogContext);
+  const [userLanguage, setUserLanguage] = useState("en");
   const toggleModal = () => setIsOpen(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = getCookie("userId");
+      const url = `/user/${userId}`;
+      const data = await fetchData(url);
+      const userLanguage = data ? data[0].preferred_language : "rs";
+      setUserLanguage(userLanguage);
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleEventClick = async (clickInfo) => {
     const eventId = Number(clickInfo.event.id);
@@ -61,6 +76,8 @@ const CalendarComponent = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
 
+  const calendarLocale = userLanguage === "en" ? enLocale : srLocale;
+
   return (
     <StyledCalendarWrapper>
       <FullCalendar
@@ -71,11 +88,11 @@ const CalendarComponent = () => {
         initialView="dayGridMonth"
         editable={false}
         selectable={false}
-        dayMaxEvents={5}
+        dayMaxEvents={4}
         eventClick={handleEventClick}
         select={handleDateClick}
         initialEvents={events}
-        locale={srLocale}
+        locale={calendarLocale}
         eventTimeFormat={timeFormat}
         slotLabelFormat={timeFormat}
       />

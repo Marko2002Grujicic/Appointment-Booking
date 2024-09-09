@@ -5,6 +5,7 @@ export const registrationForm = {
     name: "",
     email: "",
     password: "",
+    preferred_language: "rs",
   },
   formFields: {
     name: {
@@ -14,6 +15,9 @@ export const registrationForm = {
       key: "email",
     },
     password: {
+      key: "password",
+    },
+    preferred_language: {
       key: "password",
     },
   },

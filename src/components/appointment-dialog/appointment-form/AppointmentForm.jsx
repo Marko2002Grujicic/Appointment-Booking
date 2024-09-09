@@ -1,30 +1,30 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import moment from "moment";
 import { styled } from "@mui/system";
 import { Formik } from "formik";
-import { Stack, TextField } from "@mui/material";
+import { Stack } from "@mui/material";
 import { DialogContext } from "../../../context/DialogContext";
 import { appointmentFormSchema } from "./appointmentFormSchema";
 import { formatEventToAPI } from "../../../helpers/formatEventToApi";
 import { validateTimeSelection } from "../../../helpers/validateTimeSelection";
-import { fetchUserEmails } from "../../../helpers/fetch/fetch";
 import { generateTimeIntervals } from "../../../helpers/timeAdapters";
-import { getCookie } from "../../../helpers/cookies/cookies";
 import DateTimePicker from "./date-time/DateTimePicker";
 import Guests from "./guests/Guests";
 import {
   DeleteButton,
   DialogButton,
+  FormInput,
   StyledDialogActions,
-} from "../../../pages/login-and-registration/StyledComponents";
+} from "../../common/StyledComponents";
+import { useTranslation } from "react-i18next";
 import { useUserAvailability } from "../../availability/api/useUserAvailability";
 import { useAppointmentsCreate } from "../api/useAppointmentsCreate";
 import { useAppointmentsUpdate } from "../api/useAppointementsUpdate";
 import { useAppointmentsDelete } from "../api/useAppointmentsDelete";
-import { useTranslation } from "react-i18next";
+import { useGuestsEmails } from "../../../helpers/API/guests/useGuestsEmail";
+import { useGuestsAvailabilities } from "../../../helpers/API/guests/useGuestsAvailabilities";
 
 const AppointmentForm = ({ eventData }) => {
-  const userId = Number(getCookie("userId"));
   const { setIsOpen } = useContext(DialogContext);
   const { isLoading, data: userAvailability } = useUserAvailability();
   const { mutateAsync: createAppointment, isLoading: isCreating } =
@@ -33,37 +33,34 @@ const AppointmentForm = ({ eventData }) => {
     useAppointmentsUpdate();
   const { mutate: deleteAppointment, isLoading: isDeleting } =
     useAppointmentsDelete();
-  const [emailOptions, setEmailOptions] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
-    eventData
-      ? moment(eventData.start).format("YYYY-MM-DD")
-      : moment().format("YYYY-MM-DD")
+    moment(eventData?.start).format("YYYY-MM-DD")
   );
+  const { data: emailOptions } = useGuestsEmails();
+
+  // todo implement guest availability and a case where you have no availabilities 'No availabilities message or something'
+  const { data: guestAvailabilities } = useGuestsAvailabilities();
+
   const [timeIntervals, setTimeIntervals] = useState([]);
   const [rawTimeIntervals, setRawTimeIntervals] = useState([]);
-  const initialValues = {
-    title: eventData?.title || "",
-    start: eventData ? moment(eventData.start).format("HH:mm") : "",
-    end: eventData ? moment(eventData.end).format("HH:mm") : "",
-    date: eventData
-      ? moment(eventData.start).format("YYYY-MM-DD")
-      : moment().format("YYYY-MM-DD"),
-    location: eventData?.location || "",
-    guests: eventData ? JSON.parse(eventData.guests) : [],
-    description: eventData?.description || "",
-  };
+  const initialValues = useMemo(
+    () => ({
+      title: eventData?.title || "",
+      start: eventData ? moment(eventData.start).format("HH:mm") : "",
+      end: eventData ? moment(eventData.end).format("HH:mm") : "",
+      date: eventData
+        ? moment(eventData.start).format("YYYY-MM-DD")
+        : moment().format("YYYY-MM-DD"),
+      location: eventData?.location || "",
+      guests: eventData ? JSON.parse(eventData.guests) : [],
+      description: eventData?.description || "",
+    }),
+    [eventData]
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
-    const loadEmails = async () => {
-      const emails = await fetchUserEmails();
-      setEmailOptions(emails);
-    };
-    loadEmails();
-  }, [userId]);
-
-  useEffect(() => {
-    if (userAvailability && Object.keys(userAvailability).length > 0) {
+    if (userAvailability) {
       const dayIndex = moment(selectedDate).get("day");
       const selectableTimeIntervals = generateTimeIntervals(
         userAvailability,
@@ -123,7 +120,7 @@ const AppointmentForm = ({ eventData }) => {
   return (
     <Formik
       initialValues={initialValues}
-      validateOnChange={false}
+      validateOnChange={true}
       validateOnBlur={false}
       onSubmit={handleFormSubmit}
       validationSchema={appointmentFormSchema}
@@ -139,7 +136,7 @@ const AppointmentForm = ({ eventData }) => {
       }) => (
         <FormContainer onSubmit={handleSubmit}>
           <StyledStack>
-            <TextField
+            <FormInput
               fullWidth
               variant="outlined"
               color="secondary"
@@ -169,7 +166,7 @@ const AppointmentForm = ({ eventData }) => {
               setSelectedDate={setSelectedDate}
               setFieldValue={setFieldValue}
             />
-            <TextField
+            <FormInput
               fullWidth
               variant="outlined"
               color="secondary"
@@ -195,9 +192,9 @@ const AppointmentForm = ({ eventData }) => {
               handleBlur={handleBlur}
               touched={touched}
               errors={errors}
-              emailOptions={emailOptions}
+              emailOptions={emailOptions || []}
             />
-            <TextField
+            <FormInput
               label={t("appointments.description")}
               fullWidth
               variant="outlined"

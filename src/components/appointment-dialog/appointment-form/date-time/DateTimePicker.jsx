@@ -24,6 +24,8 @@ const DateTimePicker = ({
         onBlur={handleBlur}
         onChange={(e) => {
           setSelectedDate(e.target.value);
+          setFieldValue("start", "");
+          setFieldValue("end", "");
           setFieldValue("date", e.target.value);
         }}
         error={Boolean(touched["date"]) && Boolean(errors["date"])}

@@ -53,6 +53,8 @@ const Title = styled("p")({
 });
 
 const EditButton = styled(Button)(({ theme }) => ({
+  color:
+    theme.palette.mode === "light" ? colors.light.button : colors.dark.button,
   background:
-    theme.palette.mode !== "light" ? colors.light.primary : colors.dark.primary,
+    theme.palette.mode === "light" ? colors.light.primary : colors.dark.primary,
 }));

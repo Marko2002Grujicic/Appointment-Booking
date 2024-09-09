@@ -34,7 +34,7 @@ const FormikTimePicker = ({
         return (
           <Container>
             <TimePicker value={value} onTimeChange={handleTimeChange} />
-            <HelperText helperText={errors} />
+            <HelperText overlap helperText={errors} />
           </Container>
         );
       }}

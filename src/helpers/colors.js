@@ -10,4 +10,5 @@ export const colors = {
     button: "#6ea2f5",
   },
   error: "#f44336",
+  checkmark: "#34b233",
 };

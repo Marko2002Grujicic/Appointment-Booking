@@ -20,7 +20,7 @@ import {
   StyledButton,
   StyledFormIcon,
   StyledLink,
-} from "../StyledComponents";
+} from "../../../components/common/StyledComponents";
 
 const LoginForm = () => {
   const { t } = useTranslation();

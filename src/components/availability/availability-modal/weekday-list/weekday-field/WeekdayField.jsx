@@ -3,9 +3,13 @@ import { styled } from "@mui/system";
 import { FormControlLabel, Checkbox, Stack } from "@mui/material";
 import { Field } from "formik";
 import { uniqueId } from "lodash";
-import TimeSlot from "../time-slot/TimeSlot";
-import { colors } from "../../../../../helpers/colors";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
+import { colors } from "../../../../../helpers/colors";
+import TimeSlot from "../time-slot/TimeSlot";
+import "../Icon.css";
 
 const WeekdayField = ({ day, setFieldValue, errors }) => {
   const { t } = useTranslation();
@@ -25,7 +29,7 @@ const WeekdayField = ({ day, setFieldValue, errors }) => {
           <WeekDayContainer>
             <RowContainer>
               <FormLabel
-                control={<Checkbox checked={Boolean(value?.length)} />}
+                control={<StyledCheckbox checked={Boolean(value?.length)} />}
                 label={t(`day.${day}`)}
                 onChange={(event) =>
                   handleTimeChange(event.target.checked ? defaultTime : [])
@@ -48,6 +52,14 @@ const WeekdayField = ({ day, setFieldValue, errors }) => {
                   />
                 ))}
               </SlotStack>
+              <FontAwesomeIcon
+                className="icon plus"
+                icon={faPlus}
+                onClick={() => {
+                  const updatedSlots = [...value, defaultTime[0]];
+                  handleTimeChange(updatedSlots);
+                }}
+              />
             </RowContainer>
           </WeekDayContainer>
         );
@@ -80,6 +92,7 @@ const RowContainer = styled("div")({
   display: "flex",
   flexWrap: "wrap",
   alignItems: "flex-start",
+  justifyContent: "space-between",
   padding: "10px",
 
   "@media (max-width: 600px)": {
@@ -98,3 +111,12 @@ const FormLabel = styled(FormControlLabel)({
   textTransform: "capitalize",
   width: "110px",
 });
+
+const StyledCheckbox = styled(Checkbox)(({ theme }) => ({
+  ".css-havevq-MuiSvgIcon-root": {
+    color:
+      theme.palette.mode === "dark"
+        ? colors.light.primary
+        : colors.dark.primary,
+  },
+}));

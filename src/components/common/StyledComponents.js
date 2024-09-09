@@ -26,6 +26,11 @@ export const StyledHeader = styled("div")(() => ({
   marginTop: "30px",
 }));
 
+export const StyledCheckboxContainer = styled("div")({
+  display: "flex",
+  justifyContent: "center",
+});
+
 export const StyledInputsWrapper = styled("div")(() => ({
   marginTop: "55px",
   padding: "0 20px",
@@ -45,6 +50,18 @@ export const StyledInputContainer = styled("div")(({ theme }) => ({
   border: `1px solid ${
     theme.palette.mode !== "light" ? colors.dark.border : colors.light.border
   }`,
+}));
+
+export const FormInput = styled(TextField)(({ theme }) => ({
+  "& .css-p51h6s-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill, .css-p51h6s-MuiInputBase-input-MuiOutlinedInput-input, .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input  ":
+    {
+      WebkitBoxShadow: `0 0 0 100px ${
+        theme.palette.mode !== "light"
+          ? colors.dark.primary
+          : colors.light.primary
+      } inset`,
+      borderRadius: 0,
+    },
 }));
 
 export const StyledInput = styled(TextField)(({ theme, error }) => ({
@@ -164,7 +181,8 @@ export const StyledDialogTitle = styled(DialogTitle)(() => ({ theme }) => ({
 }));
 
 export const StyledDialog = styled(Dialog)(() => () => ({
-  ".css-1qxadfk-MuiPaper-root-MuiDialog-paper": {
-    maxWidth: "700px",
-  },
+  ".css-1qxadfk-MuiPaper-root-MuiDialog-paper, .css-1t1j96h-MuiPaper-root-MuiDialog-paper ":
+    {
+      maxWidth: "700px",
+    },
 }));

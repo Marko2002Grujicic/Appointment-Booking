@@ -40,7 +40,6 @@ const TimeSlot = ({ index, onDelete, day, value, errors }) => {
           />
           <FontAwesomeIcon
             icon={faTrashCan}
-            className="icon trash-can"
             onClick={() => onDelete(value.id)}
             style={{ paddingBottom: isErrorObject ? "20px" : 0 }}
           />

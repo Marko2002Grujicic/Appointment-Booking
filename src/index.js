@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { DialogProvider } from "./context/DialogContext";
 import { AuthProvider } from "./context/AuthProvider";
-import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
 import "./index.css";
 import initializeI18n from "./i18n";

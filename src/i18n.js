@@ -1,12 +1,17 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { fetchData } from "./helpers/API/API_CALLS";
+import { getCookie } from "./helpers/cookies/cookies";
 
 const initializeI18n = async () => {
-  // const userLanguage = await fetchUserLanguagePreferance();
-  const userLanguage = "rs";
+  const userId = getCookie("userId");
+  const url = `/user/${userId}`;
+  const data = await fetchData(url);
+
+  const userLanguage = data ? data[0].preferred_language : "rs";
 
   i18n.use(initReactI18next).init({
-    fallbackLng: "en",
+    fallbackLng: "rs",
     lng: userLanguage,
     interpolation: {
       escapeValue: false,

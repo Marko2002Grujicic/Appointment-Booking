@@ -20,7 +20,9 @@ import {
   StyledButton,
   StyledFormIcon,
   StyledLink,
-} from "../StyledComponents";
+  StyledCheckboxContainer,
+} from "../../../components/common/StyledComponents";
+import { FormControlLabel, Checkbox } from "@mui/material";
 
 const RegistrationForm = () => {
   const { login } = useAuth();
@@ -63,6 +65,7 @@ const RegistrationForm = () => {
         handleBlur,
         handleChange,
         handleSubmit,
+        setFieldValue,
       }) => (
         <form onSubmit={handleSubmit}>
           <StyledContainer>
@@ -133,6 +136,26 @@ const RegistrationForm = () => {
                   }
                 />
               </StyledInputContainer>
+              <StyledCheckboxContainer>
+                <FormControlLabel
+                  label="Српски"
+                  control={
+                    <Checkbox
+                      checked={values.preferred_language === "rs"}
+                      onChange={() => setFieldValue("preferred_language", "rs")}
+                    />
+                  }
+                />
+                <FormControlLabel
+                  label="English"
+                  control={
+                    <Checkbox
+                      checked={values.preferred_language === "en"}
+                      onChange={() => setFieldValue("preferred_language", "en")}
+                    />
+                  }
+                />
+              </StyledCheckboxContainer>
             </StyledInputsWrapper>
           </StyledContainer>
           <SubmitContainer>

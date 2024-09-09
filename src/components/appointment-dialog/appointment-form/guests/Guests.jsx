@@ -2,6 +2,8 @@ import React from "react";
 import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { styled } from "@mui/system";
 import { useTranslation } from "react-i18next";
+import HelperText from "../../../common/HelperText";
+import { colors } from "../../../../helpers/colors";
 
 const Guests = ({
   values,
@@ -14,7 +16,9 @@ const Guests = ({
   const { t } = useTranslation();
   return (
     <FormControl>
-      <InputLabel>{t("appointments.guests")}</InputLabel>
+      <Label error={Boolean(touched["guests"]) && Boolean(errors["guests"])}>
+        {t("appointments.guests")}
+      </Label>
       <Select
         multiple
         value={values.guests}
@@ -40,6 +44,7 @@ const Guests = ({
           </MenuItem>
         ))}
       </Select>
+      <HelperText helperText={errors["guests"] && t(`${errors["guests"]}`)} />
     </FormControl>
   );
 };
@@ -49,4 +54,8 @@ export default Guests;
 const Wrapper = styled("div")(() => ({
   display: "flex",
   flexWrap: "wrap",
+}));
+
+const Label = styled(InputLabel)(({ error }) => ({
+  colors: error && colors.error,
 }));

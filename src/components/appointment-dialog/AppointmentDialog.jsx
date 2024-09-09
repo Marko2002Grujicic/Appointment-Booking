@@ -6,7 +6,7 @@ import {
   StyledDialog,
   StyledDialogContent,
   StyledDialogTitle,
-} from "../../pages/login-and-registration/StyledComponents";
+} from "../common/StyledComponents";
 import { useTranslation } from "react-i18next";
 
 const AppointmentDialog = () => {

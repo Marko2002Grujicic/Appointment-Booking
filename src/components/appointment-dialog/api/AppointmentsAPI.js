@@ -3,14 +3,14 @@ import {
   deleteData,
   editData,
   fetchData,
-} from "../../../helpers/fetch/fetch";
+} from "../../../helpers/API/API_CALLS";
 
 export class AppointmentsAPI {
   static async fetch() {
     try {
       return await fetchData("/appointments");
     } catch (error) {
-      console.log("Error fetching events:", error);
+      console.error("Error fetching events:", error);
     }
   }
   static async update({ eventId, formattedEvent }) {

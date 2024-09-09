@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (token, id) => {
+    if (!token || !id) return;
     setIsAuthenticated(true);
     setCookie("authToken", token, 1);
     setCookie("userId", id, 1);
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     deleteCookie("authToken");
     deleteCookie("userId");
+    window.location.reload();
   };
 
   return (
