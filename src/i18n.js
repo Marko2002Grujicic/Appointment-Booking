@@ -51,6 +51,8 @@ const initializeI18n = async () => {
             description: "Additional information...",
             editAppointment: "Edit Appointment",
             createAppointment: "Create Appointment",
+            noAvailability: "There are no available slots for the selected day",
+            sendNotification: "Send a notification to guests",
           },
           availability: {
             availabilityTitle: "Your Appointment availability",
@@ -91,7 +93,7 @@ const initializeI18n = async () => {
             cancel: "Откажи",
             submit: "Сачувај",
             edit: "Измени",
-            passowоrd: "Шифра",
+            password: "Шифра",
             registrate: "Региструј се",
             login: "Улогуј се",
             name: "Име и Презиме",
@@ -106,6 +108,8 @@ const initializeI18n = async () => {
             description: "Додатне информације...",
             editAppointments: "Измени Састанак",
             createAppointment: "Креирајте Састанак",
+            noAvailability: "Нема слободних термина за изабрани дан",
+            sendNotification: "Пошаљите обавештење гостима",
           },
           availability: {
             availabilityTitle: "Ваша Доступност за састанке",

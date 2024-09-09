@@ -13,26 +13,21 @@ import { DialogContext } from "../../context/DialogContext";
 import { handleDateClick } from "./helper/calendar-helper";
 import { timeFormat } from "./helper/calendar-schema";
 import { fetchData } from "../../helpers/API/API_CALLS";
-import { getCookie } from "../../helpers/cookies/cookies";
 import "./Calendar.css";
+import { useUserData } from "../../helpers/API/user/useUserData";
 
 const CalendarComponent = () => {
   const { isLoading, data: events, error } = useAppontments();
   const { setIsOpen, setSelectedEvent } = useContext(DialogContext);
+  const { data: userData } = useUserData();
   const [userLanguage, setUserLanguage] = useState("en");
-  const toggleModal = () => setIsOpen(true);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const userId = getCookie("userId");
-      const url = `/user/${userId}`;
-      const data = await fetchData(url);
-      const userLanguage = data ? data[0].preferred_language : "rs";
-      setUserLanguage(userLanguage);
-    };
+    if (!userData) return;
+    setUserLanguage(userData.preferred_language);
+  }, [userData]);
 
-    fetchUserData();
-  }, []);
+  const toggleModal = () => setIsOpen(true);
 
   const handleEventClick = async (clickInfo) => {
     const eventId = Number(clickInfo.event.id);

@@ -6,7 +6,6 @@ import { Stack } from "@mui/material";
 import { DialogContext } from "../../../context/DialogContext";
 import { appointmentFormSchema } from "./appointmentFormSchema";
 import { formatEventToAPI } from "../../../helpers/formatEventToApi";
-import { validateTimeSelection } from "../../../helpers/validateTimeSelection";
 import { generateTimeIntervals } from "../../../helpers/timeAdapters";
 import DateTimePicker from "./date-time/DateTimePicker";
 import Guests from "./guests/Guests";
@@ -17,16 +16,17 @@ import {
   StyledDialogActions,
 } from "../../common/StyledComponents";
 import { useTranslation } from "react-i18next";
-import { useUserAvailability } from "../../availability/api/useUserAvailability";
 import { useAppointmentsCreate } from "../api/useAppointmentsCreate";
 import { useAppointmentsUpdate } from "../api/useAppointementsUpdate";
 import { useAppointmentsDelete } from "../api/useAppointmentsDelete";
 import { useGuestsEmails } from "../../../helpers/API/guests/useGuestsEmail";
 import { useGuestsAvailabilities } from "../../../helpers/API/guests/useGuestsAvailabilities";
+import { useUserData } from "../../../helpers/API/user/useUserData";
+import SendNotification from "./send-notification/SendNotification";
 
 const AppointmentForm = ({ eventData }) => {
+  const { t } = useTranslation();
   const { setIsOpen } = useContext(DialogContext);
-  const { isLoading, data: userAvailability } = useUserAvailability();
   const { mutateAsync: createAppointment, isLoading: isCreating } =
     useAppointmentsCreate();
   const { mutateAsync: editAppointment, isLoading: isEditing } =
@@ -37,9 +37,8 @@ const AppointmentForm = ({ eventData }) => {
     moment(eventData?.start).format("YYYY-MM-DD")
   );
   const { data: emailOptions } = useGuestsEmails();
-
-  // todo implement guest availability and a case where you have no availabilities 'No availabilities message or something'
-  const { data: guestAvailabilities } = useGuestsAvailabilities();
+  const { data: userData, isLoading: isUserDataLoading } = useUserData();
+  const [selectedGuests, setSelectedGuests] = useState([userData.email]);
 
   const [timeIntervals, setTimeIntervals] = useState([]);
   const [rawTimeIntervals, setRawTimeIntervals] = useState([]);
@@ -52,28 +51,38 @@ const AppointmentForm = ({ eventData }) => {
         ? moment(eventData.start).format("YYYY-MM-DD")
         : moment().format("YYYY-MM-DD"),
       location: eventData?.location || "",
-      guests: eventData ? JSON.parse(eventData.guests) : [],
+      guests: eventData
+        ? JSON.parse(eventData.guests)
+        : userData
+        ? [userData.email]
+        : [],
       description: eventData?.description || "",
+      sendNotification: eventData?.sendNotification || true,
     }),
-    [eventData]
+    [eventData, userData]
   );
-  const { t } = useTranslation();
+  const { data: guestAvailabilities, isLoading: isGuestsAvailabilityLoading } =
+    useGuestsAvailabilities(selectedGuests);
 
   useEffect(() => {
-    if (userAvailability) {
+    if (guestAvailabilities) {
       const dayIndex = moment(selectedDate).get("day");
       const selectableTimeIntervals = generateTimeIntervals(
-        userAvailability,
+        guestAvailabilities,
         dayIndex
       );
       setTimeIntervals(selectableTimeIntervals);
-      const rawTime = generateTimeIntervals(userAvailability, dayIndex, true);
+      const rawTime = generateTimeIntervals(
+        guestAvailabilities,
+        dayIndex,
+        true
+      );
       setRawTimeIntervals(rawTime);
     } else {
       setTimeIntervals([]);
       setRawTimeIntervals([]);
     }
-  }, [selectedDate, userAvailability]);
+  }, [selectedDate, guestAvailabilities]);
 
   const handleDelete = async () => {
     try {
@@ -88,20 +97,6 @@ const AppointmentForm = ({ eventData }) => {
 
   const handleFormSubmit = async (newEvent) => {
     const formattedEvent = formatEventToAPI(newEvent);
-
-    const isValidTime = [userAvailability].every((availability) =>
-      validateTimeSelection(
-        newEvent.date,
-        newEvent.start,
-        newEvent.end,
-        availability
-      )
-    );
-
-    if (!isValidTime) {
-      alert("Selected time is not available for all participants.");
-      return;
-    }
 
     try {
       if (eventData && formattedEvent) {
@@ -154,6 +149,16 @@ const AppointmentForm = ({ eventData }) => {
                   : ""
               }
             />
+            <Guests
+              values={values}
+              setFieldValue={setFieldValue}
+              handleBlur={handleBlur}
+              touched={touched}
+              errors={errors}
+              isGuestsLoading={isGuestsAvailabilityLoading || isUserDataLoading}
+              emailOptions={emailOptions || []}
+              setSelectedGuests={setSelectedGuests}
+            />
             <DateTimePicker
               values={values}
               errors={errors}
@@ -186,14 +191,6 @@ const AppointmentForm = ({ eventData }) => {
                   : ""
               }
             />
-            <Guests
-              values={values}
-              setFieldValue={setFieldValue}
-              handleBlur={handleBlur}
-              touched={touched}
-              errors={errors}
-              emailOptions={emailOptions || []}
-            />
             <FormInput
               label={t("appointments.description")}
               fullWidth
@@ -205,23 +202,27 @@ const AppointmentForm = ({ eventData }) => {
               onBlur={handleBlur}
               onChange={handleChange}
             />
+            <SendNotification
+              value={values.sendNotification}
+              setFieldValue={setFieldValue}
+            />
           </StyledStack>
           <StyledDialogActions spacebetween={"true"}>
             <DeleteButton
-              disabled={isLoading || isCreating || isEditing || isDeleting}
+              disabled={isCreating || isEditing || isDeleting || !eventData}
               onClick={handleDelete}
             >
               {t("form.delete")}
             </DeleteButton>
             <FlexBox>
               <DialogButton
-                disabled={isLoading || isCreating || isEditing || isDeleting}
+                disabled={isCreating || isEditing || isDeleting}
                 onClick={() => setIsOpen((prev) => !prev)}
               >
                 {t("form.cancel")}
               </DialogButton>
               <DialogButton
-                disabled={isLoading || isCreating || isEditing || isDeleting}
+                disabled={isCreating || isEditing || isDeleting}
                 type="submit"
               >
                 {t("form.submit")}

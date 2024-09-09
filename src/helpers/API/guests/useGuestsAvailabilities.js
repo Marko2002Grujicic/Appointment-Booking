@@ -1,12 +1,23 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { GuestsAPI } from "./GuestsAPI";
 
-export function useGuestsAvailabilities() {
+const GUESTS_AVAILABILITIES = "guests-availabilities";
+
+export function useGuestsAvailabilities(emails) {
   return useQuery({
-    queryKey: ["guests-availabilities"],
-    queryFn: GuestsAPI.fetchGuestAvailabilities,
+    queryKey: [GUESTS_AVAILABILITIES, emails],
+    queryFn: () => GuestsAPI.fetchGuestAvailabilities(emails),
     refetchOnMount: true,
-    keepPreviousData: true,
+    keepPreviousData: false,
     refetchOnWindowFocus: false,
+    enabled: Boolean(emails),
   });
+}
+
+export function useInvalidateGuestsAvailabilities() {
+  const queryClient = useQueryClient();
+
+  return (emails) => {
+    queryClient.invalidateQueries([GUESTS_AVAILABILITIES, emails]);
+  };
 }

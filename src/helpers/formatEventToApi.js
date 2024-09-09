@@ -13,5 +13,6 @@ export const formatEventToAPI = (event) => {
     location: event.location,
     guests: JSON.stringify(event.guests),
     description: event.description,
+    sendNotification: event.sendNotification,
   };
 };

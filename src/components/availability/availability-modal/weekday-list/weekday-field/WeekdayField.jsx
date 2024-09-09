@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "@mui/system";
-import { FormControlLabel, Checkbox, Stack } from "@mui/material";
+import { FormControlLabel, Stack } from "@mui/material";
 import { Field } from "formik";
 import { uniqueId } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../../../helpers/colors";
 import TimeSlot from "../time-slot/TimeSlot";
 import "../Icon.css";
+import { StyledCheckbox } from "../../../../common/StyledComponents";
 
 const WeekdayField = ({ day, setFieldValue, errors }) => {
   const { t } = useTranslation();
@@ -111,12 +112,3 @@ const FormLabel = styled(FormControlLabel)({
   textTransform: "capitalize",
   width: "110px",
 });
-
-const StyledCheckbox = styled(Checkbox)(({ theme }) => ({
-  ".css-havevq-MuiSvgIcon-root": {
-    color:
-      theme.palette.mode === "dark"
-        ? colors.light.primary
-        : colors.dark.primary,
-  },
-}));

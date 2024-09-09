@@ -20,5 +20,5 @@ export function useInvalidateUserAvailability() {
   const queryClient = useQueryClient();
   const userId = getCookie("userId");
 
-  return () => queryClient.invalidateQueries(USER_AVAILABILITY, userId);
+  return () => queryClient.invalidateQueries([USER_AVAILABILITY, userId]);
 }

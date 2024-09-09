@@ -1,6 +1,7 @@
 import React from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { styled } from "@mui/system";
+import { useTranslation } from "react-i18next";
 import { filteredTimeSlots } from "../../../../../helpers/timeAdapters";
 import HelperText from "../../../../common/HelperText";
 
@@ -17,6 +18,7 @@ const TimeSelect = ({
   isEnd = false,
   rawTimeIntervals = [],
 }) => {
+  const { t } = useTranslation();
   let filteredTimeIntervals = timeIntervals;
 
   if (isEnd && selectedStartTime) {
@@ -39,14 +41,18 @@ const TimeSelect = ({
         onChange={onChange}
         error={Boolean(error)}
       >
-        {filteredTimeIntervals.map((timeInterval, index) => {
-          const time = isEnd ? timeInterval.end : timeInterval.start;
-          return (
-            <MenuItem key={`${name}-${index}-${time}`} value={time}>
-              {time}
-            </MenuItem>
-          );
-        })}
+        {filteredTimeIntervals.length > 0 ? (
+          filteredTimeIntervals.map((timeInterval, index) => {
+            const time = isEnd ? timeInterval.end : timeInterval.start;
+            return (
+              <MenuItem key={`${name}-${index}-${time}`} value={time}>
+                {time}
+              </MenuItem>
+            );
+          })
+        ) : (
+          <MenuItem disabled>{t("appointments.noAvailability")}</MenuItem>
+        )}
       </Select>
       <HelperText helperText={helperText} />
     </StyledFormControl>

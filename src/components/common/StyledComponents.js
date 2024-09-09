@@ -2,6 +2,7 @@ import { styled } from "@mui/system";
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -62,6 +63,15 @@ export const FormInput = styled(TextField)(({ theme }) => ({
       } inset`,
       borderRadius: 0,
     },
+}));
+
+export const StyledCheckbox = styled(Checkbox)(({ theme }) => ({
+  ".css-havevq-MuiSvgIcon-root": {
+    color:
+      theme.palette.mode === "dark"
+        ? colors.light.primary
+        : colors.dark.primary,
+  },
 }));
 
 export const StyledInput = styled(TextField)(({ theme, error }) => ({
@@ -154,6 +164,7 @@ export const DeleteButton = styled(Button)(({ theme }) => ({
 export const StyledDialogActions = styled(DialogActions)(
   ({ theme, spacebetween }) => ({
     justifyContent: spacebetween && "space-between",
+    paddingLeft: 0,
     marginTop: "8px",
     background:
       theme.palette.mode !== "light"
