@@ -3,12 +3,13 @@ import axios from "axios";
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../../context/AuthProvider";
+import { FormControlLabel, Checkbox } from "@mui/material";
 
+import { useAuth } from "../../../context/AuthProvider";
+import { registrationForm } from "../helper/constants";
 import user_icon from "../../../assets/form-icons/person.png";
 import password_icon from "../../../assets/form-icons/password.png";
 import email_icon from "../../../assets/form-icons/email.png";
-import { registrationForm } from "../helper/constants";
 
 import {
   StyledContainer,
@@ -22,7 +23,6 @@ import {
   StyledLink,
   StyledCheckboxContainer,
 } from "../../../components/common/StyledComponents";
-import { FormControlLabel, Checkbox } from "@mui/material";
 
 const RegistrationForm = () => {
   const { login } = useAuth();
@@ -142,7 +142,9 @@ const RegistrationForm = () => {
                   control={
                     <Checkbox
                       checked={values.preferred_language === "rs"}
-                      onChange={() => setFieldValue("preferred_language", "rs")}
+                      onChange={() => {
+                        setFieldValue("preferred_language", "rs");
+                      }}
                     />
                   }
                 />
@@ -151,7 +153,9 @@ const RegistrationForm = () => {
                   control={
                     <Checkbox
                       checked={values.preferred_language === "en"}
-                      onChange={() => setFieldValue("preferred_language", "en")}
+                      onChange={() => {
+                        setFieldValue("preferred_language", "en");
+                      }}
                     />
                   }
                 />
