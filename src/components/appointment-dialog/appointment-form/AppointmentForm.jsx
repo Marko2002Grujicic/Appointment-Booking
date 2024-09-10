@@ -3,10 +3,20 @@ import moment from "moment";
 import { styled } from "@mui/system";
 import { Formik } from "formik";
 import { Stack } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useAppointmentsCreate } from "../api/useAppointmentsCreate";
+import { useAppointmentsUpdate } from "../api/useAppointementsUpdate";
+import { useAppointmentsDelete } from "../api/useAppointmentsDelete";
+import { useGuestsEmails } from "../../../helpers/API/guests/useGuestsEmail";
+import { useGuestsAvailabilities } from "../../../helpers/API/guests/useGuestsAvailabilities";
+import { useUserData } from "../../../helpers/API/user/useUserData";
+
 import { DialogContext } from "../../../context/DialogContext";
 import { appointmentFormSchema } from "./appointmentFormSchema";
 import { formatEventToAPI } from "../../../helpers/formatEventToApi";
 import { generateTimeIntervals } from "../../../helpers/timeAdapters";
+
+import SendNotification from "./send-notification/SendNotification";
 import DateTimePicker from "./date-time/DateTimePicker";
 import Guests from "./guests/Guests";
 import {
@@ -15,14 +25,6 @@ import {
   FormInput,
   StyledDialogActions,
 } from "../../common/StyledComponents";
-import { useTranslation } from "react-i18next";
-import { useAppointmentsCreate } from "../api/useAppointmentsCreate";
-import { useAppointmentsUpdate } from "../api/useAppointementsUpdate";
-import { useAppointmentsDelete } from "../api/useAppointmentsDelete";
-import { useGuestsEmails } from "../../../helpers/API/guests/useGuestsEmail";
-import { useGuestsAvailabilities } from "../../../helpers/API/guests/useGuestsAvailabilities";
-import { useUserData } from "../../../helpers/API/user/useUserData";
-import SendNotification from "./send-notification/SendNotification";
 
 const AppointmentForm = ({ eventData }) => {
   const { t } = useTranslation();
@@ -128,6 +130,7 @@ const AppointmentForm = ({ eventData }) => {
         handleBlur,
         handleSubmit,
         setFieldValue,
+        dirty,
       }) => (
         <FormContainer onSubmit={handleSubmit}>
           <StyledStack>
@@ -158,6 +161,7 @@ const AppointmentForm = ({ eventData }) => {
               isGuestsLoading={isGuestsAvailabilityLoading || isUserDataLoading}
               emailOptions={emailOptions || []}
               setSelectedGuests={setSelectedGuests}
+              userEmail={userData.email}
             />
             <DateTimePicker
               values={values}
@@ -222,7 +226,7 @@ const AppointmentForm = ({ eventData }) => {
                 {t("form.cancel")}
               </DialogButton>
               <DialogButton
-                disabled={isCreating || isEditing || isDeleting}
+                disabled={isCreating || isEditing || isDeleting || !dirty}
                 type="submit"
               >
                 {t("form.submit")}

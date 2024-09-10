@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
 import { Formik } from "formik";
 import { useMediaQuery, useTheme } from "@mui/material";
-import WeekdayList from "../availability-modal/weekday-list/WeekdayList";
-import { availabilitySchema } from "../availabilitySchema";
+import { useTranslation } from "react-i18next";
 import { useUserAvailability } from "../api/useUserAvailability";
 import { useUserAvailabilityUpdate } from "../api/useUserAvailabilityUpdate";
+import WeekdayList from "../availability-modal/weekday-list/WeekdayList";
+import { availabilitySchema } from "../availabilitySchema";
 import { AVAILABILITY_INITIAL_VALUES } from "../../../helpers/constants";
 import {
   DialogButton,
@@ -13,7 +14,6 @@ import {
   StyledDialogContent,
   StyledDialogTitle,
 } from "../../common/StyledComponents";
-import { useTranslation } from "react-i18next";
 
 const AvailabilityModal = ({ isOpen, setIsOpen }) => {
   const { t } = useTranslation();
@@ -53,7 +53,7 @@ const AvailabilityModal = ({ isOpen, setIsOpen }) => {
           validationSchema={availabilitySchema}
           onSubmit={handleSubmitting}
         >
-          {({ setFieldValue, handleSubmit, errors }) => (
+          {({ setFieldValue, handleSubmit, errors, dirty }) => (
             <form onSubmit={handleSubmit}>
               <WeekdayList setFieldValue={setFieldValue} errors={errors} />
               <StyledDialogActions>
@@ -63,6 +63,7 @@ const AvailabilityModal = ({ isOpen, setIsOpen }) => {
                 <DialogButton
                   type="submit"
                   onClick={(prev) => setIsOpen(!prev)}
+                  disabled={!dirty || isLoading || error || updateError}
                 >
                   {t("form.submit")}
                 </DialogButton>
