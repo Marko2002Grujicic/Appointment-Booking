@@ -2,9 +2,10 @@ import React from "react";
 import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { styled } from "@mui/system";
 import { useTranslation } from "react-i18next";
-import HelperText from "../../../common/HelperText";
-import { colors } from "../../../../helpers/colors";
 import { useInvalidateGuestsAvailabilities } from "../../../../helpers/API/guests/useGuestsAvailabilities";
+
+import { colors } from "../../../../helpers/colors";
+import HelperText from "../../../common/HelperText";
 
 const Guests = ({
   values,
@@ -15,9 +16,21 @@ const Guests = ({
   emailOptions,
   isGuestsLoading,
   setSelectedGuests,
+  userEmail,
 }) => {
   const { t } = useTranslation();
   const invalidateGuestsAvailability = useInvalidateGuestsAvailabilities();
+
+  const handleGuestChange = (event) => {
+    const selectedGuests = event.target.value;
+
+    setFieldValue("guests", selectedGuests);
+    setFieldValue("start", "");
+    setFieldValue("end", "");
+    invalidateGuestsAvailability(values.guests);
+    setSelectedGuests(selectedGuests);
+  };
+
   return (
     <FormControl>
       <Label error={Boolean(touched["guests"]) && Boolean(errors["guests"])}>
@@ -28,19 +41,18 @@ const Guests = ({
         multiple
         value={values.guests}
         onChange={(event) => {
-          const newGuests = event.target.value;
-          setFieldValue("guests", newGuests);
-          setFieldValue("start", "");
-          setFieldValue("end", "");
-          invalidateGuestsAvailability(values.guests);
-          setSelectedGuests(newGuests);
+          handleGuestChange(event);
         }}
         onBlur={handleBlur}
         renderValue={(selected) =>
           Array.isArray(selected) ? (
             <Wrapper>
               {selected.map((value, index) => (
-                <StyledChip key={`${index}-${value}`} label={value} />
+                <StyledChip
+                  key={`${index}-${value}`}
+                  label={value}
+                  color={value === userEmail ? "primary" : "default"}
+                />
               ))}
             </Wrapper>
           ) : null
@@ -51,7 +63,7 @@ const Guests = ({
         name="guests"
       >
         {emailOptions.map((email) => (
-          <MenuItem key={email} value={email}>
+          <MenuItem key={email} disabled={email === userEmail} value={email}>
             {email}
           </MenuItem>
         ))}

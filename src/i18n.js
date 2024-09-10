@@ -106,7 +106,7 @@ const initializeI18n = async () => {
             addLocation: "Додајте место или линк",
             guests: "Гости",
             description: "Додатне информације...",
-            editAppointments: "Измени Састанак",
+            editAppointment: "Измени Састанак",
             createAppointment: "Креирајте Састанак",
             noAvailability: "Нема слободних термина за изабрани дан",
             sendNotification: "Пошаљите обавештење гостима",

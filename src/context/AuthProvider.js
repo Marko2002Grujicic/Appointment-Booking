@@ -13,15 +13,15 @@ export const AuthProvider = ({ children }) => {
 
   const login = (token, id) => {
     if (!token || !id) return;
-    setIsAuthenticated(true);
     setCookie("authToken", token, 1);
     setCookie("userId", id, 1);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
     deleteCookie("authToken");
     deleteCookie("userId");
+    setIsAuthenticated(false);
     window.location.reload();
   };
 

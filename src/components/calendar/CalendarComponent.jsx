@@ -9,12 +9,13 @@ import srLocale from "@fullcalendar/core/locales/sr-cyrl";
 import enLocale from "@fullcalendar/core/locales/en-gb";
 
 import { useAppontments } from "../appointment-dialog/api/useAppointments";
+import { useUserData } from "../../helpers/API/user/useUserData";
 import { DialogContext } from "../../context/DialogContext";
+import { fetchData } from "../../helpers/API/API_CALLS";
 import { handleDateClick } from "./helper/calendar-helper";
 import { timeFormat } from "./helper/calendar-schema";
-import { fetchData } from "../../helpers/API/API_CALLS";
+import { colors } from "../../helpers/colors";
 import "./Calendar.css";
-import { useUserData } from "../../helpers/API/user/useUserData";
 
 const CalendarComponent = () => {
   const { isLoading, data: events, error } = useAppontments();
@@ -99,6 +100,13 @@ const StyledCalendarWrapper = styled(Box)(({ theme }) => ({
   "& .fc-theme-standard .fc-popover": {
     background: theme.palette.mode === "dark" ? "#2c3e50" : "#fff",
   },
+  "& .fc-direction-ltr .fc-list-day-side-text, .fc-direction-rtl .fc-list-day-text":
+    {
+      color:
+        theme.palette.mode === "dark"
+          ? colors.dark.primary
+          : colors.light.primary,
+    },
 }));
 
 export default CalendarComponent;

@@ -23,7 +23,7 @@ export class AppointmentsAPI {
     return newEvents;
   }
   static async delete({ eventId }) {
-    const url = `/delete-appointment/${eventId}`;
+    const url = `/delete-appointments/${eventId}`;
     const eventsWithoutDeleted = await deleteData(url);
 
     return eventsWithoutDeleted;
