@@ -110,8 +110,8 @@ const LoginForm = () => {
             </StyledInputsWrapper>
           </StyledContainer>
           <SubmitContainer>
-            <StyledButton type="submit">Улогуј се</StyledButton>
-            <StyledLink to="/registration"> Региструј се</StyledLink>
+            <StyledButton type="submit">{t("form.login")}</StyledButton>
+            <StyledLink to="/registration"> {t("form.registrate")}</StyledLink>
           </SubmitContainer>
         </form>
       )}
