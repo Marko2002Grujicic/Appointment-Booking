@@ -54,6 +54,20 @@ export const en = {
         wrongFormat: "Wrong email format",
         emailInUse: "Email is already in use",
       },
+      confirmation: {
+        title: "Are you sure you want to delete this meeting?",
+        content:
+          "Deleting a meeting is permanent and cannot be undone once deleted",
+      },
+      toast: {
+        updateAvailability:
+          "Please set up your appointment availability in settings!",
+        availabilityUpdated: "You have successfully updated your availability",
+        appointmentBooked: "You have successfully created an appointment",
+        appointmentEdited: "You have successfully edited an appointment",
+        appointmentDeleted: "You have successfully deleted an appointment",
+        error: "An error has occurred",
+      },
     },
   },
 };

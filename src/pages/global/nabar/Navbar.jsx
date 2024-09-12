@@ -4,7 +4,6 @@ import { Box, IconButton, styled, Tooltip, useTheme } from "@mui/material";
 import {
   LightModeOutlined,
   DarkModeOutlined,
-  NotificationsOutlined,
   Logout,
 } from "@mui/icons-material";
 
@@ -28,16 +27,11 @@ const Navbar = () => {
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>{icon}</IconButton>
         {isAuthenticated && (
-          <>
-            <IconButton>
-              <NotificationsOutlined />
+          <Tooltip title="Одјава">
+            <IconButton onClick={logout}>
+              <Logout />
             </IconButton>
-            <Tooltip title="Одјава">
-              <IconButton onClick={logout}>
-                <Logout />
-              </IconButton>
-            </Tooltip>
-          </>
+          </Tooltip>
         )}
       </Box>
     </Wrapper>
