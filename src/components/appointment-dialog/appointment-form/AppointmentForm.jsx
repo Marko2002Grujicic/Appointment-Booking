@@ -41,7 +41,6 @@ const AppointmentForm = ({ eventData }) => {
   const { data: emailOptions } = useGuestsEmails();
   const { data: userData, isLoading: isUserDataLoading } = useUserData();
   const [selectedGuests, setSelectedGuests] = useState([userData.email]);
-
   const [timeIntervals, setTimeIntervals] = useState([]);
   const [rawTimeIntervals, setRawTimeIntervals] = useState([]);
   const initialValues = useMemo(
