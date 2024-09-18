@@ -24,6 +24,7 @@ function App() {
   const { t } = useTranslation();
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     toast.info(t("toast.updateAvailability"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

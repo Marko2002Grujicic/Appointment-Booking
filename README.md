@@ -78,3 +78,7 @@ Backend - `nodemon server.js`
 - clean up code
 
 - personalize each profile using welcoming messages, names or profile pictures
+
+- add notifications panel where the user can see latest notifications and changes
+
+- disable editing for meeting guests
