@@ -97,6 +97,9 @@ const CalendarComponent = () => {
 };
 
 const StyledCalendarWrapper = styled(Box)(({ theme }) => ({
+  "& .fc-button": {
+    textTransform: "capitalize",
+  },
   "& .fc-theme-standard .fc-popover": {
     background: theme.palette.mode === "dark" ? "#2c3e50" : "#fff",
   },

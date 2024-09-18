@@ -165,7 +165,7 @@ export const StyledDialogActions = styled(DialogActions)(
   ({ theme, spacebetween }) => ({
     justifyContent: spacebetween && "space-between",
     paddingLeft: 0,
-    marginTop: "8px",
+    paddingTop: "16px",
     background:
       theme.palette.mode !== "light"
         ? colors.dark.primary

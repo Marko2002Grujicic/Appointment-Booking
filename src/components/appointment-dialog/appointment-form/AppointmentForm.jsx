@@ -25,10 +25,13 @@ import {
   FormInput,
   StyledDialogActions,
 } from "../../common/StyledComponents";
+import ConfirmationDialog from "./confirmation-dialog/ConfirmationDialog";
+import { toast } from "react-toastify";
 
 const AppointmentForm = ({ eventData }) => {
   const { t } = useTranslation();
   const { setIsOpen } = useContext(DialogContext);
+  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
   const { mutateAsync: createAppointment, isLoading: isCreating } =
     useAppointmentsCreate();
   const { mutateAsync: editAppointment, isLoading: isEditing } =
@@ -43,6 +46,9 @@ const AppointmentForm = ({ eventData }) => {
   const [selectedGuests, setSelectedGuests] = useState([userData.email]);
   const [timeIntervals, setTimeIntervals] = useState([]);
   const [rawTimeIntervals, setRawTimeIntervals] = useState([]);
+  const { data: guestAvailabilities, isLoading: isGuestsAvailabilityLoading } =
+    useGuestsAvailabilities(selectedGuests);
+
   const initialValues = useMemo(
     () => ({
       title: eventData?.title || "",
@@ -62,8 +68,6 @@ const AppointmentForm = ({ eventData }) => {
     }),
     [eventData, userData]
   );
-  const { data: guestAvailabilities, isLoading: isGuestsAvailabilityLoading } =
-    useGuestsAvailabilities(selectedGuests);
 
   useEffect(() => {
     if (guestAvailabilities) {
@@ -85,15 +89,21 @@ const AppointmentForm = ({ eventData }) => {
     }
   }, [selectedDate, guestAvailabilities]);
 
-  const handleDelete = async () => {
+  const handleDeleteConfirm = async () => {
     try {
       const eventId = eventData.id;
       deleteAppointment({ eventId });
     } catch (error) {
       console.error("Error deleting the event", error.message);
+      toast.error(t("toast.error"));
     } finally {
+      toast.success(t("toast.appointmentDeleted"));
       setIsOpen((prev) => !prev);
     }
+  };
+
+  const handleDeleteClick = () => {
+    setConfirmationOpen(true);
   };
 
   const handleFormSubmit = async (newEvent) => {
@@ -108,133 +118,146 @@ const AppointmentForm = ({ eventData }) => {
       }
     } catch (error) {
       console.error("Error submitting the event:", error.message);
+      toast.error(t("toast.error"));
     } finally {
+      toast.success(
+        t(!eventData ? "toast.appointmentBooked" : "toast.appointmentEdited")
+      );
       setIsOpen((prev) => !prev);
     }
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validateOnChange={true}
-      validateOnBlur={false}
-      onSubmit={handleFormSubmit}
-      validationSchema={appointmentFormSchema}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        setFieldValue,
-        dirty,
-      }) => (
-        <FormContainer onSubmit={handleSubmit}>
-          <StyledStack>
-            <FormInput
-              fullWidth
-              variant="outlined"
-              color="secondary"
-              type="text"
-              label={t("appointments.title")}
-              placeholder={t("appointments.addTitle")}
-              name="title"
-              value={values.title}
-              onBlur={handleBlur}
-              onChange={handleChange}
-              error={Boolean(touched["title"]) && Boolean(errors["title"])}
-              helperText={
-                touched["title"] && errors["title"]
-                  ? t(`errors.${errors["title"]}`)
-                  : ""
-              }
-            />
-            <Guests
-              values={values}
-              setFieldValue={setFieldValue}
-              handleBlur={handleBlur}
-              touched={touched}
-              errors={errors}
-              isGuestsLoading={isGuestsAvailabilityLoading || isUserDataLoading}
-              emailOptions={emailOptions || []}
-              setSelectedGuests={setSelectedGuests}
-              userEmail={userData.email}
-            />
-            <DateTimePicker
-              values={values}
-              errors={errors}
-              touched={touched}
-              timeIntervals={timeIntervals}
-              handleBlur={handleBlur}
-              handleChange={handleChange}
-              rawTimeIntervals={rawTimeIntervals}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              setFieldValue={setFieldValue}
-            />
-            <FormInput
-              fullWidth
-              variant="outlined"
-              color="secondary"
-              type="text"
-              label={t("appointments.location")}
-              placeholder={t("appointments.addLocation")}
-              name="location"
-              value={values.location}
-              onBlur={handleBlur}
-              onChange={handleChange}
-              error={
-                Boolean(touched["location"]) && Boolean(errors["location"])
-              }
-              helperText={
-                touched["location"] && errors["location"]
-                  ? t(`errors.${errors["location"]}`)
-                  : ""
-              }
-            />
-            <FormInput
-              label={t("appointments.description")}
-              fullWidth
-              variant="outlined"
-              color="secondary"
-              type="text"
-              name="description"
-              value={values.description}
-              onBlur={handleBlur}
-              onChange={handleChange}
-            />
-            <SendNotification
-              value={values.sendNotification}
-              setFieldValue={setFieldValue}
-            />
-          </StyledStack>
-          <StyledDialogActions spacebetween={"true"}>
-            <DeleteButton
-              disabled={isCreating || isEditing || isDeleting || !eventData}
-              onClick={handleDelete}
-            >
-              {t("form.delete")}
-            </DeleteButton>
-            <FlexBox>
-              <DialogButton
-                disabled={isCreating || isEditing || isDeleting}
-                onClick={() => setIsOpen((prev) => !prev)}
+    <>
+      <Formik
+        initialValues={initialValues}
+        validateOnChange={true}
+        validateOnBlur={false}
+        onSubmit={handleFormSubmit}
+        validationSchema={appointmentFormSchema}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          setFieldValue,
+          dirty,
+        }) => (
+          <FormContainer onSubmit={handleSubmit}>
+            <StyledStack>
+              <FormInput
+                fullWidth
+                variant="outlined"
+                color="secondary"
+                type="text"
+                label={t("appointments.title")}
+                placeholder={t("appointments.addTitle")}
+                name="title"
+                value={values.title}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={Boolean(touched["title"]) && Boolean(errors["title"])}
+                helperText={
+                  touched["title"] && errors["title"]
+                    ? t(`errors.${errors["title"]}`)
+                    : ""
+                }
+              />
+              <Guests
+                values={values}
+                setFieldValue={setFieldValue}
+                handleBlur={handleBlur}
+                touched={touched}
+                errors={errors}
+                isGuestsLoading={
+                  isGuestsAvailabilityLoading || isUserDataLoading
+                }
+                emailOptions={emailOptions || []}
+                setSelectedGuests={setSelectedGuests}
+                userEmail={userData.email}
+              />
+              <DateTimePicker
+                values={values}
+                errors={errors}
+                touched={touched}
+                timeIntervals={timeIntervals}
+                handleBlur={handleBlur}
+                handleChange={handleChange}
+                rawTimeIntervals={rawTimeIntervals}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                setFieldValue={setFieldValue}
+              />
+              <FormInput
+                fullWidth
+                variant="outlined"
+                color="secondary"
+                type="text"
+                label={t("appointments.location")}
+                placeholder={t("appointments.addLocation")}
+                name="location"
+                value={values.location}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={
+                  Boolean(touched["location"]) && Boolean(errors["location"])
+                }
+                helperText={
+                  touched["location"] && errors["location"]
+                    ? t(`errors.${errors["location"]}`)
+                    : ""
+                }
+              />
+              <FormInput
+                label={t("appointments.description")}
+                fullWidth
+                variant="outlined"
+                color="secondary"
+                type="text"
+                name="description"
+                value={values.description}
+                onBlur={handleBlur}
+                onChange={handleChange}
+              />
+              <SendNotification
+                value={values.sendNotification}
+                setFieldValue={setFieldValue}
+              />
+            </StyledStack>
+            <StyledDialogActions spacebetween={"true"}>
+              <DeleteButton
+                disabled={isCreating || isEditing || isDeleting || !eventData}
+                onClick={handleDeleteClick}
               >
-                {t("form.cancel")}
-              </DialogButton>
-              <DialogButton
-                disabled={isCreating || isEditing || isDeleting || !dirty}
-                type="submit"
-              >
-                {t("form.submit")}
-              </DialogButton>
-            </FlexBox>
-          </StyledDialogActions>
-        </FormContainer>
-      )}
-    </Formik>
+                {t("form.delete")}
+              </DeleteButton>
+              <FlexBox>
+                <DialogButton
+                  disabled={isCreating || isEditing || isDeleting}
+                  onClick={() => setIsOpen((prev) => !prev)}
+                >
+                  {t("form.cancel")}
+                </DialogButton>
+                <DialogButton
+                  disabled={isCreating || isEditing || isDeleting || !dirty}
+                  type="submit"
+                >
+                  {t("form.submit")}
+                </DialogButton>
+              </FlexBox>
+            </StyledDialogActions>
+          </FormContainer>
+        )}
+      </Formik>
+      <ConfirmationDialog
+        open={isConfirmationOpen}
+        onClose={() => setConfirmationOpen(false)}
+        onConfirm={handleDeleteConfirm}
+      />
+    </>
   );
 };
 

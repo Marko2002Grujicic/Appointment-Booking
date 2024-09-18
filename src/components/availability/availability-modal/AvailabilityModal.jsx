@@ -14,6 +14,7 @@ import {
   StyledDialogContent,
   StyledDialogTitle,
 } from "../../common/StyledComponents";
+import { toast } from "react-toastify";
 
 const AvailabilityModal = ({ isOpen, setIsOpen }) => {
   const { t } = useTranslation();
@@ -29,8 +30,12 @@ const AvailabilityModal = ({ isOpen, setIsOpen }) => {
         await updateAvailability(values);
       } catch (error) {
         console.error("Failed to save availability:", error);
+        toast.error(t("toast.error"));
+      } finally {
+        toast.success(t("toast.availabilityUpdated"));
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [updateAvailability]
   );
 
